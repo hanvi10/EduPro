@@ -6,7 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required
+from helpers import login_required, apology
 
 # Configure application
 app = Flask(__name__)
@@ -39,35 +39,35 @@ def register():
 
         # Generate hash
         hash = generate_password_hash(password)
-        user = db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, hash)
+        
         # Ensure there is username
-        # if not username:
-        #    return apology("must provide username", 400)
+        if not username:
+            return apology("must provide username", 400)
 
         # Ensure there is password
-        #if not password:
-        #    return apology("must provide password", 400)
+        if not password:
+            return apology("must provide password", 400)
 
         # Ensure there is confirmation password
-        #if not confirmation:
-         #   return apology("must provide confirmation password", 400)
+        if not confirmation:
+           return apology("must provide confirmation password", 400)
 
         # Ensure password and confirmation password match
-        #if password != confirmation:
-         #   return apology("password does not match confirmation", 400)
+        if password != confirmation:
+           return apology("password does not match confirmation", 400)
 
         # Ensure that username does not exist
-        #try:
+        try:
             # Insert new user to SQL table
-            # user = db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, hash)
-        #except:
-          #  return apology("username already in use", 400)
+            user = db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, hash)
+        except:
+            return apology("username already in use", 400)
 
         # Remember which user has logged in
         session["user_id"] = user
 
         # Redirect user to home page
-        return redirect("/")
+        return render_template("index.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:

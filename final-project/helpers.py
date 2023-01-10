@@ -1,5 +1,14 @@
+import os
+import urllib.parse
+
+from flask import redirect, render_template, request, session
 from functools import wraps
-from flask import g, request, redirect, url_for
+
+
+def apology(message, code):
+    """Render message as an apology to user."""
+    return render_template("apology.html", code=code, message=message)
+
 
 def login_required(f):
     """
