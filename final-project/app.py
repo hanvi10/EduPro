@@ -24,7 +24,11 @@ db = SQL("sqlite:///final.db")
 
 @app.route('/')
 def homepage():
-    return render_template("homepage.html")
+    try:
+        session["user_id"]
+        return render_template("index.html")
+    except KeyError:
+        return render_template("homepage.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -67,7 +71,7 @@ def register():
         session["user_id"] = user
 
         # Redirect user to home page
-        return render_template("index.html")
+        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -79,7 +83,7 @@ def login():
     """Log user in"""
 
     # Forget any user_id
-    # session.clear()
+    session.clear()
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -93,11 +97,11 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        #rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
-        #if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-         #   return apology("invalid username and/or password", 403)
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
