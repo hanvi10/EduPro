@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Countdown
+{% endblock %}
+
+{% block main %}
+        <h1>Countdown</h1>
+
+        <form action="/countdown" method="POST">
+            <label for="minutes">Enter the number of minutes:</label>
+            <input type="number" id="minutes" name="minutes">
+            <input type="submit" value="Start Countdown">
+        </form>
+{% endblock %}
