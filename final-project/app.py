@@ -125,17 +125,3 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-
-@app.route("/countdown", methods=["GET", "POST"])
-@login_required
-def countdown():
-    """Countdown timer"""
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-        minutes = int(request.form['minutes'])
-        return render_template('clock.html', minutes=minutes)
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template('countdown.html')

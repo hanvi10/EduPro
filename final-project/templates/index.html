@@ -5,5 +5,25 @@
 {% endblock %}
 
 {% block main %}
-        <h1>Index</h1>
+    <h1>Index</h1>
+
+    <form>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" min="1" id="minutes" placeholder="Minutes" type="number">
+        </div>
+        <button class="btn btn-primary" type="submit">submit</button>
+    </form>
+
+    <div class="watch"></div>
+
+    <div class="time">
+        00:00
+    </div>
+
+    <div class="controls">
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+        <button id="reset">Reset</button>
+    </div>
+
 {% endblock %}
