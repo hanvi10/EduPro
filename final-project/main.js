@@ -1,4 +1,3 @@
-alert('hello');
 // Global variables
 const time_el = document.querySelector('.watch .time')
 const start_btn = document.getElementById('start')
@@ -9,7 +8,7 @@ let seconds = 48456;
 let interval = null;
 
 // Event listeners
-
+start_btn.addEventListener('click', start)
 
 // Update the timer
 function timer () {
