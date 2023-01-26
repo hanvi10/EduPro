@@ -6,28 +6,86 @@
 
 {% block main %}
 
-<script src="../main.js"></script>
-
-
     <h1>Index</h1>
 
     <form>
         <div class="mb-3">
             <input autocomplete="off" class="form-control mx-auto w-auto" min="1" id="minutes" placeholder="Minutes" type="number">
         </div>
-        <button class="btn btn-primary" type="submit">submit</button>
     </form>
 
-    <div class="watch"></div>
+    <div class="watch">
+		<div class="time">
+			00:00:00
+		</div>
+		<div class="controls">
+			<button id="start">Start</button>
+			<button id="stop">Stop</button>
+			<button id="reset">Reset</button>
+		</div>
+	</div>
 
-    <div class="time">
-        00:00
-    </div>
+	<script>
+        // Global variables
+        const time_el = document.querySelector(".watch .time");
+        const start_btn = document.getElementById("start");
+        const stop_btn = document.getElementById("stop");
+        const reset_btn = document.getElementById("reset");
 
-    <div class="controls">
-        <button id="start">Start</button>
-        <button id="stop">Stop</button>
-        <button id="reset">Reset</button>
-    </div>
+        let input_seconds;
+        let seconds;
+        let interval = null;
+
+        function getInput () {
+            let input_minutes = Number(document.getElementById("minutes").value);
+            input_seconds = input_minutes * 60;
+            seconds = input_seconds;
+        }
+
+        start_btn.addEventListener("click", getInput);
+        start_btn.addEventListener("click", start);
+        stop_btn.addEventListener("click", stop);
+        reset_btn.addEventListener("click", reset);
+
+        // Update the timer
+        function timer () {
+            seconds--;
+
+            // Format our time
+            updateDisplay();
+            
+        }
+
+        function start () {
+            if (interval) {
+                return
+            }
+
+            interval = setInterval(timer, 1000);
+        }
+
+        function stop () {
+            clearInterval(interval);
+            interval = null;
+        }
+
+        function reset () {
+            stop();
+            seconds = input_seconds;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            let hrs = Math.floor(seconds / 3600);
+            let mins = Math.floor((seconds - (hrs * 3600)) / 60);
+            let secs = seconds % 60;
+            if (secs < 10) secs = "0" + secs;
+            if (mins < 10) mins = "0" + mins;
+            if (hrs < 10) hrs = "0" + hrs;
+            time_el.innerText = `${hrs}:${mins}:${secs}`;
+        }
+        
+        
+    </script>
 
 {% endblock %}
