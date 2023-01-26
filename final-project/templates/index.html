@@ -19,58 +19,69 @@
 			00:00:00
 		</div>
 		<div class="controls">
-			<button id="start">Start</button>
-			<button id="stop">Stop</button>
+			<button id="startStop">Start</button>
 			<button id="reset">Reset</button>
 		</div>
 	</div>
 
 	<script>
+        
+        /* TODO: Bug to fix: when clicking start after stopping clock the clock continues at the time that user inputed and not the time that the clock stopped. 
+         This is because when start button is clicked again the function getInput() is called again and variable seconds is set to equal the input from the user. */ 
+
         // Global variables
         const time_el = document.querySelector(".watch .time");
-        const start_btn = document.getElementById("start");
-        const stop_btn = document.getElementById("stop");
+        const startStop_btn = document.getElementById("startStop");
         const reset_btn = document.getElementById("reset");
-
+        let stopTime = 0;
+        let running = false;
         let input_seconds;
         let seconds;
         let interval = null;
 
+        // Gets input from user and stores it in variable seconds
         function getInput () {
             let input_minutes = Number(document.getElementById("minutes").value);
             input_seconds = input_minutes * 60;
             seconds = input_seconds;
         }
 
-        start_btn.addEventListener("click", getInput);
-        start_btn.addEventListener("click", start);
-        stop_btn.addEventListener("click", stop);
+        // Event listeners
+        startStop_btn.addEventListener("click", getInput);
+        startStop_btn.addEventListener("click", startStop);
         reset_btn.addEventListener("click", reset);
 
         // Update the timer
         function timer () {
+            running = true;
             seconds--;
 
             // Format our time
             updateDisplay();
-            
         }
 
-        function start () {
-            if (interval) {
-                return
+        function startStop () {
+            if (running) {
+                // Timer is currently running, so stop it
+                clearInterval(interval);
+                interval = null;
+                running = false;
+                startStop_btn.innerText = "Start";
+            } else {
+                // Timer is currently stopped, so start it
+                interval = setInterval(timer, 1000);
+                running = true;
+                startStop_btn.innerText = "Stop";
             }
-
-            interval = setInterval(timer, 1000);
-        }
-
-        function stop () {
-            clearInterval(interval);
-            interval = null;
         }
 
         function reset () {
-            stop();
+            if (running) {
+                clearInterval(interval);
+                interval = null;
+                running = false;
+                startStop_btn.innerText = "Start";
+            }
             seconds = input_seconds;
             updateDisplay();
         }
@@ -84,8 +95,6 @@
             if (hrs < 10) hrs = "0" + hrs;
             time_el.innerText = `${hrs}:${mins}:${secs}`;
         }
-        
-        
     </script>
 
 {% endblock %}
