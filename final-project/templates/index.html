@@ -6,24 +6,21 @@
 
 {% block main %}
 
-    <h1>Index</h1>
-
-    <form>
-        <div class="mb-3">
-            <input autocomplete="off" class="form-control mx-auto w-auto" min="1" id="minutes" placeholder="Minutes" type="number">
+      <div class="watch">
+        <form>
+            <div class="mb-3">
+              <input autocomplete="off" class="form-control mx-auto w-auto" min="1" id="minutes" placeholder="Minutes" type="number">
+            </div>
+          </form>
+        <div class="time">
+          00:00
         </div>
-    </form>
-
-    <div class="watch">
-		<div class="time">
-			00:00
-		</div>
-		<div class="controls">
-			<button id="startStop">Start</button>
-			<button id="reset">Reset</button>
-		</div>
-	</div>
-
+        <div class="controls">
+          <button id="startStop">Start</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
+      
 	<script>
 
         // Global variables
