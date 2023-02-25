@@ -18,6 +18,7 @@
         <div class="controls">
           <button id="startStop">Start</button>
           <button id="reset">Reset</button>
+          <button id="changeBackground">Change Background</button>
         </div>
       </div>
       
@@ -33,9 +34,34 @@
         let seconds;
         let interval = null;
 
+        const changeBackground_btn = document.getElementById("changeBackground");
+        const body_el = document.querySelector("body");
+
+        const backgrounds = [
+        "https://i.pinimg.com/originals/ba/d9/4d/bad94d1b553df5173dc94aad51f73da2.gif",
+        "https://media3.giphy.com/media/ofrQ8FYfTD8gE/giphy.gif",
+        "https://media.tenor.com/PDvcHKkIewAAAAAd/lofi-hiphop-radio-beats-to-relax-study-to.gif",
+        "https://i.pinimg.com/originals/88/e5/45/88e54506f23a4716bc0e57870f1561a2.gif",
+        "https://i.pinimg.com/originals/2e/c5/2e/2ec52e1923abaf03ea7244dbfd121117.gif",
+        "https://giphy.com/embed/uFmH8za4E6M5STIiTu" 
+        ];
+
+        let currentBackgroundIndex = 0;
+
         // Event listeners
         startStop_btn.addEventListener("click", startStop);
         reset_btn.addEventListener("click", reset);
+        changeBackground_btn.addEventListener("click", changeBackground);
+
+        // Changes backround
+        function changeBackground() {
+            currentBackgroundIndex++;
+            if (currentBackgroundIndex >= backgrounds.length) {
+              currentBackgroundIndex = 0;
+            }
+            body_el.style.backgroundImage = `url('${backgrounds[currentBackgroundIndex]}')`;
+          }
+
 
         // Gets input from user and stores it in variable seconds
         function getInput () {
