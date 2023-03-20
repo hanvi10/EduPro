@@ -18,8 +18,11 @@
         <div class="controls">
           <button id="startStop">Start</button>
           <button id="reset">Reset</button>
-          <button id="changeBackground">Change Background</button>
         </div>
+    </div>
+    <div>
+        <p><i class="arrow right" id="nextBackground"></i></p>
+        <p><i class="arrow left" id="prevBackground"></i></p>
     </div>
 
     <script>
@@ -33,7 +36,8 @@
         let seconds;
         let interval = null;
         
-        const changeBackground_btn = document.getElementById("changeBackground");
+        const nextBackground_btn = document.getElementById("nextBackground");
+        const prevBackground_btn = document.getElementById("prevBackground");
         const body_el = document.querySelector("body");
         
         const backgrounds = [
@@ -48,29 +52,52 @@
         // Event listeners
         startStop_btn.addEventListener("click", startStop);
         reset_btn.addEventListener("click", reset);
-        changeBackground_btn.addEventListener("click", changeBackground);
+        nextBackground_btn.addEventListener("click", nextBackground);
+        prevBackground_btn.addEventListener("click", prevBackground);
+
+        // When clicking enter at form
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent page refresh
+            reset();
+            startStop();
+          });
         
         // Changes backround
-        function changeBackground() {
+        function nextBackground() {
             currentBackgroundIndex++;
             if (currentBackgroundIndex >= backgrounds.length) {
-              currentBackgroundIndex = 0;
+                currentBackgroundIndex = 0;
             }
             body_el.style.backgroundImage = `url('${backgrounds[currentBackgroundIndex]}')`;
-          }
-        
-        
-        // Gets input from user and stores it in variable seconds
-        function getInput () {
-            let input_minutes = Number(document.getElementById("minutes").value);
-            input_seconds = input_minutes * 60;
-            seconds = input_seconds;
         }
         
-        function timer () {
-            running = true;
-            seconds--;
+        function prevBackground() {
+            currentBackgroundIndex--;
+            if (currentBackgroundIndex < 0) {
+                currentBackgroundIndex = backgrounds.length - 1;
+            }
+            body_el.style.backgroundImage = `url('${backgrounds[currentBackgroundIndex]}')`;
+        }
+
+        // Gets input from user and stores it in variable seconds
+        function getInput() {
+            let input_minutes = Number(document.getElementById("minutes").value);
+            input_seconds = input_minutes * 60;
+            if (!input_seconds) {
+                seconds = 0;
+            } else {
+                seconds = input_seconds;
+            }
+        }
         
+        
+        function timer () {
+            // Format time
+            updateDisplay();
+
+            // Decrement the seconds variable
+            seconds--;
+
             // Check if seconds is less than or equal to 0
             if (seconds <= 0) {
                 clearInterval(interval);
@@ -78,9 +105,6 @@
                 running = false;
                 startStop_btn.innerText = "Start";
             }
-        
-            // Format time
-            updateDisplay();
         }
         
         
@@ -115,9 +139,14 @@
                 running = false;
                 startStop_btn.innerText = "Start";
             }
-            seconds = input_seconds;
+            if (input_seconds === 0 || input_seconds === null || isNaN(input_seconds)) {
+                seconds = 0;
+            } else {
+                seconds = input_seconds;
+            }
             updateDisplay();
         }
+        
         
         function updateDisplay() {
             let hrs = Math.floor(seconds / 3600);

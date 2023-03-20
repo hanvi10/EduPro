@@ -1,19 +1,19 @@
-.watch {
+  .watch {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
-    max-width: 360px;
+    max-width: 500px;
   }
-  
-  
+
   .time {
     color: rgb(255, 255, 255);
     font-size: 8rem;
     margin-bottom: 1rem;
+    text-align: center;
   }
-  
+
   
   .controls {
     display: flex;
@@ -66,3 +66,27 @@
     background-color: rgba(0, 0, 0, 0.4);
   }
   
+  /* arrows */
+  .arrow {
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 10px;
+    position: absolute;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%) rotate(-45deg);
+    -webkit-transform: translateY(-50%) rotate(-45deg);
+  }
+  
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    right: 3rem;
+  }
+
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    left: 3rem;
+  }
