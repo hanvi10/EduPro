@@ -24,11 +24,7 @@ db = SQL("sqlite:///final.db")
 
 @app.route('/')
 def homepage():
-    try:
-        session["user_id"]
-        return render_template("index.html")
-    except KeyError:
-        return render_template("homepage.html")
+    return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

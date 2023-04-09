@@ -7,11 +7,11 @@
 {% block main %}
 
     <div class="watch">
-        <form>
-            <div class="mb-3">
-              <input autocomplete="off" class="form-control mx-auto w-auto" min="1" id="minutes" placeholder="Minutes" type="number">
-            </div>
-        </form>
+        <div class="controls">
+            <button id="study">Study</button>
+            <button id="shortBreak">Short Break</button>
+            <button id="longBreak">Long Break</button>
+        </div>
         <div class="time">
           00:00
         </div>
@@ -30,15 +30,19 @@
         const time_el = document.querySelector(".watch .time");
         const startStop_btn = document.getElementById("startStop");
         const reset_btn = document.getElementById("reset");
+        const nextBackground_btn = document.getElementById("nextBackground");
+        const prevBackground_btn = document.getElementById("prevBackground");
+        const body_el = document.querySelector("body");
+        const study_btn = document.getElementById("study");
+        const shortBreak_btn = document.getElementById("shortBreak");
+        const longBreak_btn = document.getElementById("longBreak");
         let stopTime = 0;
         let running = false;
         let input_seconds;
         let seconds;
         let interval = null;
         
-        const nextBackground_btn = document.getElementById("nextBackground");
-        const prevBackground_btn = document.getElementById("prevBackground");
-        const body_el = document.querySelector("body");
+
         
         const backgrounds = [
         "https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg",
@@ -54,14 +58,11 @@
         reset_btn.addEventListener("click", reset);
         nextBackground_btn.addEventListener("click", nextBackground);
         prevBackground_btn.addEventListener("click", prevBackground);
+        study_btn.addEventListener("click", study);
+        shortBreak_btn.addEventListener("click", shortBreak);
+        longBreak_btn.addEventListener("click", longBreak);
 
-        // When clicking enter at form
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent page refresh
-            reset();
-            startStop();
-          });
-        
+
         // Changes backround
         function nextBackground() {
             currentBackgroundIndex++;
@@ -79,24 +80,32 @@
             body_el.style.backgroundImage = `url('${backgrounds[currentBackgroundIndex]}')`;
         }
 
-        // Gets input from user and stores it in variable seconds
-        function getInput() {
-            let input_minutes = Number(document.getElementById("minutes").value);
-            input_seconds = input_minutes * 60;
-            if (!input_seconds) {
-                seconds = 0;
-            } else {
-                seconds = input_seconds;
-            }
+        function study() {
+            input_seconds = 25 * 60;
+            seconds = input_seconds;
+            updateDisplay();
         }
         
-        
-        function timer () {
-            // Format time
+        function shortBreak() {
+            input_seconds = 5 * 60;
+            seconds = input_seconds;
             updateDisplay();
+        }
+        
+        function longBreak() {
+            input_seconds = 10 * 60;
+            seconds = input_seconds;
+            updateDisplay();
+        }
+        
+        // Function that runs every second
+        function timer () {
 
             // Decrement the seconds variable
             seconds--;
+
+            // Format time
+            updateDisplay();
 
             // Check if seconds is less than or equal to 0
             if (seconds <= 0) {
@@ -121,9 +130,7 @@
                 if (stopTime) {
                     seconds = stopTime;
                     stopTime = 0;
-                } else {
-                    getInput();
-                }
+                } 
                 if (seconds > 0) {
                 interval = setInterval(timer, 1000);
                 running = true;
@@ -160,7 +167,7 @@
             } else {
                 time_el.innerText = `${hrs}:${mins}:${secs}`;
             }
-        }
+        }        
     </script>
       
 
