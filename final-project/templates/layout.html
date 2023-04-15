@@ -20,57 +20,7 @@
 
     </head>
 
-    <body>
-
-      <!-- if user is logged in 
-      {% if session["user_id"] %}
-      navbar 
-        <nav class="navbar navbar-expand-lg bg-light">
-          <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="/">Home</a>
-                </li>
-              </ul>
-              <ul class="navbar-nav ms-auto mt-2">
-                  <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
-                  <li class="nav-item">
-                    <a class="nav-link" class="nav-link disabled">Han Virgili</a>
-                  </li>
-              </ul>
-            </div>
-          </div>
-        </nav> 
-                        
-        if user is NOT logged in 
-        {% else %}
-        navbar 
-        <nav class="navbar navbar-expand-lg bg-light">
-          <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="/register">Register</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/">Home</a>
-                </li>
-              </ul>
-              <ul class="navbar-nav ms-auto mt-2">
-                <li class="nav-item">
-                  <a class="nav-link" class="nav-link disabled">Han Virgili</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-        {% endif %}
-        -->
-
+    <body>        
         {% if get_flashed_messages() %}
             <header>
                 <div class="alert alert-primary mb-0 text-center" role="alert">
