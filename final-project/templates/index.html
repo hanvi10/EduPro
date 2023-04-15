@@ -41,9 +41,10 @@
         let input_seconds;
         let seconds;
         let interval = null;
-        
+        let currentBackgroundIndex = 0;
 
         
+        // Background images
         const backgrounds = [
         "https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg",
         "https://images.pexels.com/photos/2775196/pexels-photo-2775196.jpeg",
@@ -51,8 +52,7 @@
         "https://images.pexels.com/photos/2850287/pexels-photo-2850287.jpeg"
         ];
         
-        let currentBackgroundIndex = 0;
-        
+
         // Event listeners
         startStop_btn.addEventListener("click", startStop);
         reset_btn.addEventListener("click", reset);
@@ -61,7 +61,7 @@
         study_btn.addEventListener("click", study);
         shortBreak_btn.addEventListener("click", shortBreak);
         longBreak_btn.addEventListener("click", longBreak);
-
+    
 
         // Changes backround
         function nextBackground() {
@@ -81,20 +81,25 @@
         }
 
         function study() {
+            stop();
             input_seconds = 25 * 60;
             seconds = input_seconds;
+            stopTime = 0;
             updateDisplay();
         }
-        
         function shortBreak() {
+            stop();
             input_seconds = 5 * 60;
             seconds = input_seconds;
+            stopTime = 0;
             updateDisplay();
         }
         
         function longBreak() {
+            stop();
             input_seconds = 10 * 60;
             seconds = input_seconds;
+            stopTime = 0;
             updateDisplay();
         }
         
@@ -106,24 +111,24 @@
 
             // Format time
             updateDisplay();
-
+            
             // Check if seconds is less than or equal to 0
             if (seconds <= 0) {
-                clearInterval(interval);
-                interval = null;
-                running = false;
-                startStop_btn.innerText = "Start";
+                stop();
             }
         }
         
+        function stop () {
+            clearInterval(interval);
+            interval = null;
+            running = false;
+            startStop_btn.innerText = "Start";
+        }
         
         function startStop () {
             if (running) {
                 // Timer is currently running, so stop it
-                clearInterval(interval);
-                interval = null;
-                running = false;
-                startStop_btn.innerText = "Start";
+                stop();
                 stopTime = seconds;
             } else {
                 // Timer is currently stopped, so start it
@@ -138,14 +143,16 @@
                 }
             }
         }
-        
+
+        // Reset timer
         function reset () {
+            
+            // Stop timer
             if (running) {
-                clearInterval(interval);
-                interval = null;
-                running = false;
-                startStop_btn.innerText = "Start";
+                stop();
             }
+
+            // Reset time
             if (input_seconds === 0 || input_seconds === null || isNaN(input_seconds)) {
                 seconds = 0;
             } else {
@@ -154,7 +161,7 @@
             updateDisplay();
         }
         
-        
+        // Format time
         function updateDisplay() {
             let hrs = Math.floor(seconds / 3600);
             let mins = Math.floor((seconds - (hrs * 3600)) / 60);
