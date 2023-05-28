@@ -6,6 +6,8 @@
 
 {% block main %}
 
+    <link href="../static/pomodoro.css" rel="stylesheet">
+
     <div class="watch">
         <div class="controls">
             <button id="study">Study</button>
@@ -20,18 +22,13 @@
           <button id="reset">Reset</button>
         </div>
     </div>
-    <div>
-        <p><i class="arrow right" id="nextBackground"></i></p>
-        <p><i class="arrow left" id="prevBackground"></i></p>
-    </div>
+
 
     <script>
         // Global variables
         const time_el = document.querySelector(".watch .time");
         const startStop_btn = document.getElementById("startStop");
         const reset_btn = document.getElementById("reset");
-        const nextBackground_btn = document.getElementById("nextBackground");
-        const prevBackground_btn = document.getElementById("prevBackground");
         const body_el = document.querySelector("body");
         const study_btn = document.getElementById("study");
         const shortBreak_btn = document.getElementById("shortBreak");
@@ -41,7 +38,6 @@
         let input_seconds;
         let seconds;
         let interval = null;
-        let currentBackgroundIndex = 0;
 
         
         // Background images
@@ -56,29 +52,12 @@
         // Event listeners
         startStop_btn.addEventListener("click", startStop);
         reset_btn.addEventListener("click", reset);
-        nextBackground_btn.addEventListener("click", nextBackground);
-        prevBackground_btn.addEventListener("click", prevBackground);
         study_btn.addEventListener("click", study);
         shortBreak_btn.addEventListener("click", shortBreak);
         longBreak_btn.addEventListener("click", longBreak);
     
+        // Functions
 
-        // Changes backround
-        function nextBackground() {
-            currentBackgroundIndex++;
-            if (currentBackgroundIndex >= backgrounds.length) {
-                currentBackgroundIndex = 0;
-            }
-            body_el.style.backgroundImage = `url('${backgrounds[currentBackgroundIndex]}')`;
-        }
-        
-        function prevBackground() {
-            currentBackgroundIndex--;
-            if (currentBackgroundIndex < 0) {
-                currentBackgroundIndex = backgrounds.length - 1;
-            }
-            body_el.style.backgroundImage = `url('${backgrounds[currentBackgroundIndex]}')`;
-        }
 
         function study() {
             stop();
@@ -87,6 +66,8 @@
             stopTime = 0;
             updateDisplay();
         }
+
+
         function shortBreak() {
             stop();
             input_seconds = 5 * 60;
@@ -95,6 +76,7 @@
             updateDisplay();
         }
         
+
         function longBreak() {
             stop();
             input_seconds = 10 * 60;
