@@ -30,9 +30,9 @@
     outline: none;
     user-select: none;
     cursor: pointer;
-    color: black;
+    color: white;
     font-size: 1.125rem;
-    background-color: white;
+    background-color: transparent;
     margin: 0 0.5rem;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -41,13 +41,24 @@
   }
   
   .controls button:hover {
+    background-color: white;
+    color: black;
+  }
+
+  button.active {
+    background-color: white;
+    color: black;
+  }
+
+  .controls:nth-child(3) button {
+    background-color: white;
+    color: black;
+  }
+
+  .controls:nth-child(3) button:hover {
     background-color: transparent;
     color: white;
-    }
-  
-    .controls button:active {
-      background-color: rgba(0, 0, 0, 0.2);
-    }
+  }
   
   /* backround dark layer */
   body::before {
