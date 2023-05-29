@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+    <link href="../static/homepage.css" rel="stylesheet">
+
+    <h1>Brand Name</h1>
+    <form action="/login" method="get">
+        <button type="submit">Start Now</button>
+    </form>
+{% endblock %}

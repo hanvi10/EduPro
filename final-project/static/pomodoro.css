@@ -1,0 +1,61 @@
+/* clock */
+.watch {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .time {
+    color: rgb(255, 255, 255);
+    font-size: 8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  /* clock buttons */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  
+  .controls button {
+    appearance: none;
+    background: none;
+    border: none;
+    outline: none;
+    user-select: none;
+    cursor: pointer;
+    color: black;
+    font-size: 1.125rem;
+    background-color: white;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: 0.2s;
+    box-shadow: 0 0 0 1px white;
+  }
+  
+  .controls button:hover {
+    background-color: transparent;
+    color: white;
+    }
+  
+    .controls button:active {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  
+  /* backround dark layer */
+  body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+  }

@@ -25,11 +25,12 @@ db = SQL("sqlite:///final.db")
 
 @app.route("/")
 def homepage():
-    return render_template("index.html")
+    """Show homepage"""
+    return render_template("homepage.html")
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
     """Register user"""
 
     # User reached route via POST (as by submitting a form via POST)
@@ -70,12 +71,12 @@ def register():
         # Remember which user has logged in
         session["user_id"] = user
 
-        # Redirect user to home page
-        return redirect("/")
+        # Redirect user to application
+        return render_template("pomodoro.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("register.html")
+        return render_template("signup.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -109,8 +110,8 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
-        # Redirect user to home page
-        return redirect("/")
+        # Redirect user to application
+        return render_template("pomodoro.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
