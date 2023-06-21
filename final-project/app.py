@@ -72,7 +72,7 @@ def signup():
         session["user_id"] = user
 
         # Redirect user to application
-        return render_template("pomodoro.html")
+        return redirect("/pomodoro")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -111,7 +111,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to application
-        return render_template("pomodoro.html")
+        return redirect("/pomodoro")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -127,3 +127,10 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+
+@app.route("/pomodoro")
+def pomodoro():
+    """Pomodoro"""
+
+    return render_template("pomodoro.html")
