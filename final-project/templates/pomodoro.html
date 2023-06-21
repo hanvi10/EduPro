@@ -53,6 +53,16 @@
         ];
         
 
+        // Change backround image every hour
+        function changeBackground() {
+            const randomIndex = Math.floor(Math.random() * backgrounds.length);
+            const imageUrl = backgrounds[randomIndex];
+            document.body.style.backgroundImage = `url('${imageUrl}')`;
+          }
+      
+        setInterval(changeBackground, 3600000);
+
+
         // Event listeners
         startStop_btn.addEventListener("click", startStop);
         reset_btn.addEventListener("click", reset);
@@ -70,11 +80,12 @@
             });
           });
 
-        
+        // Set timer to study when page loads and set a random background
         window.addEventListener("DOMContentLoaded", function() {
-            // Set initial state
             study_btn.classList.add("active");
-            study();});
+            study();
+            changeBackground();
+        });
     
         // Functions
         function study() {
