@@ -26,6 +26,10 @@ db = SQL("sqlite:///final.db")
 @app.route("/")
 def homepage():
     """Show homepage"""
+    
+    # Forget any user_id
+    session.clear()
+
     return render_template("homepage.html")
 
 
