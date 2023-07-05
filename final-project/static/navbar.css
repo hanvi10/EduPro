@@ -1,39 +1,52 @@
 /* The side navigation menu */
 .sidenav {
   height: 100%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
+  width: 230px; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
   left: 0;
-  background-color: #111; /* Black*/
+  background-color: transparent; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 60px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
 /* The navigation menu links */
-.sidenav a {
+.sidenav button {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: #000000;
   display: block;
-  transition: 0.3s;
+  transition: 0.2s;
+  width: 210px; /* Adjust the width to accommodate margins */
+  box-sizing: border-box; 
+  border: none; 
+  border-radius: 10px; 
+  margin-bottom: 10px; 
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 8px 8px 8px 20px; /* Adjust the left padding */
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically align the icon and text */
+  background-color: #ffffff;
+}
+
+.sidenav button i {
+  margin-right: 10px; 
+  color: #4a9eff;
 }
 
 /* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
-  color: #f1f1f1;
+.sidenav button:hover {
+  background-color: #e3ecf2;
 }
 
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
+/* Settings and Log out at the bottom */
+.bottom-links {
   position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
+  bottom: 0;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
@@ -41,6 +54,7 @@
   transition: margin-left .5s;
   padding: 20px;
 }
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
