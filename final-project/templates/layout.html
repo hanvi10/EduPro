@@ -28,41 +28,51 @@
 
         <!-- navbar -->
         <link href="../static/navbar.css" rel="stylesheet">
-        <div id="mySidenav" class="sidenav">
-          <button onclick="openCloseNav()"><i class="bi bi-list"></i><span id="buttonText">Name</span></button>
-          <button href="/pomodoro"><i class="bi bi-clock"></i><span id="buttonText">Pomodoro</span></button>
-          <button href="#"><i class="bi bi-calendar"></i><span id="buttonText">Calendar</span></button>
-          <button href="#"><i class="bi bi-list-check"></i><span id="buttonText">To-do List</span></button>
-          <button href="#"><i class="bi bi-music-note-beamed"></i><span id="buttonText">Music</span></button>
-          <div class="bottom-links">
-            <button href="#"><i class="bi bi-gear"></i><span id="buttonText">Settings</span></button>
-            <button href="/logout"><i class="bi bi-box-arrow-left"></i><span id="buttonText">Log Out</span></button>
+        <nav>
+          <div id="mySidenav" class="sidenav">
+              <button onclick="openCloseNav()"><i class="bi bi-list"></i><span id="buttonText">Name</span></button>
+              <button href="/pomodoro"><i class="bi bi-clock"></i><span id="buttonText">Pomodoro</span></button>
+              <button href="#"><i class="bi bi-calendar"></i><span id="buttonText">Calendar</span></button>
+              <button href="#"><i class="bi bi-list-check"></i><span id="buttonText">To-do List</span></button>
+              <button href="#"><i class="bi bi-music-note-beamed"></i><span id="buttonText">Music</span></button>
+              <div class="bottom-links">
+                  <button href="#"><i class="bi bi-gear"></i><span id="buttonText">Settings</span></button>
+                  <button href="/logout"><i class="bi bi-box-arrow-left"></i><span id="buttonText">Log Out</span></button>
+              </div>
           </div>
-        </div>
+      </nav>
 
         <script>
-
+          // function to open and close nav
           function openCloseNav() {
+            // get nav, button text, and buttons from the html
             var nav = document.getElementById("mySidenav");
             var buttonText = document.querySelectorAll("#buttonText");
             var buttons = document.querySelectorAll("#mySidenav button");
             // close nav
-            if (nav.style.width === "230px") {
-              nav.style.width = "80px";
+            if (getComputedStyle(nav).width === "230px") {
+              nav.style.width = "80px"; // change nav width to smaller size
               // hide text
               buttonText.forEach(function(button) {
-                button.style.display = "none";
+                button.style.display = "none"; 
               });
-              // change button width
+              // buttons
               buttons.forEach(function(button) {
-                button.style.width = "60px";
+                button.style.width = "60px"; // change button width
+                setTimeout(function() {
+                  button.style.justifyContent = "center"; // center horizontally
+                  button.style.alignItems = "center"; // center vertically
+                }, 150); // 150 milliseconds delay (0.15 seconds)
               });
               // open nav
             } else {
-              nav.style.width = "230px";
-              // change button width
+              nav.style.width = "230px"; //change nav width to larger size
+              // buttons
               buttons.forEach(function(button) {
-                button.style.width = "210px";
+                button.style.width = "210px"; // change button width 
+                button.style.justifyContent = "flex-start"; // align content to the left
+                button.style.alignItems = ""; // reset vertical alignment
+             
               });
               // show text after a delay
               setTimeout(function() {

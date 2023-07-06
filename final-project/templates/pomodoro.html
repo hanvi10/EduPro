@@ -88,7 +88,6 @@
           changeBackground();
       });
 
-      // Functions
       function study() {
           stop();
           input_seconds = pomodoroMin * 60;
@@ -166,6 +165,7 @@
           
           // Stop time to 0
           stopTime = 0;
+
           // Reset time
           if (input_seconds === 0 || input_seconds === null || isNaN(input_seconds)) {
               seconds = 0;
