@@ -123,6 +123,7 @@ def login():
 
 
 @app.route("/logout")
+@login_required
 def logout():
     """Log user out"""
 
@@ -134,13 +135,42 @@ def logout():
 
 
 @app.route("/pomodoro")
+@login_required
 def pomodoro():
     """Pomodoro"""
 
     return render_template("pomodoro.html")
 
 
-@app.route("/calendar")
+@app.route("/calendar", methods=["GET", "POST"])
+@login_required
 def calendar():
     """Calendar"""
-    return render_template("calendar.html")
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        redirect("/add_event")
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("calendar.html")
+
+
+@app.route("/add_event", methods=["GET", "POST"])
+@login_required
+def add_event():
+    """Add an event to the calendar"""
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Get data from form
+
+        # Give message to user
+        flash("Event added!")
+
+        # Redirect user to calendar
+        return redirect("/calendar")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("add_event.html")
+    
