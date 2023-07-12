@@ -138,3 +138,9 @@ def pomodoro():
     """Pomodoro"""
 
     return render_template("pomodoro.html")
+
+
+@app.route("/calendar")
+def calendar():
+    """Calendar"""
+    return render_template("calendar.html")
