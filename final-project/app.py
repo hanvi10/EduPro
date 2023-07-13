@@ -1,4 +1,5 @@
 import os
+import re
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -151,7 +152,21 @@ def calendar():
         redirect("/add_event")
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("calendar.html")
+        # Get user id
+        user_id = session["user_id"]
+
+        # Get event name from SQL table
+        event_name = db.execute("SELECT name FROM events WHERE user_id = ?", user_id)
+
+        # Get event date from SQL table
+        event_date = db.execute("SELECT event_date FROM events WHERE user_id = ?", user_id)
+
+        # Get event color from SQL table
+        event_color = db.execute("SELECT color FROM events WHERE user_id = ?", user_id)
+
+
+        # Show calendar
+        return render_template("calendar.html", name=event_name, date=event_date, color=event_color)
 
 
 @app.route("/add_event", methods=["GET", "POST"])
@@ -162,8 +177,43 @@ def add_event():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # Get data from form
 
+        # Get data from form
+        event_name = request.form.get("event")
+        event_date = request.form.get("date")
+        event_color = request.form.get("color")
+
+        # Check that user typed name, date, and color
+        if not event_name:
+            return apology("must provide event name", 400)
+        if not event_date:
+            return apology("must provide event date", 400)
+        if not event_color:
+            return apology("must provide event color", 400)
+
+        # Check that date is in MM/DD/YYYY format
+        if not re.match(r"\d{2}/\d{2}/\d{4}", event_date):
+            return apology("event date must be in MM/DD/YYYY format", 400)
+
+        # Check that date is valid
+        try:
+            month, day, year = event_date.split("/")
+            month = int(month)
+            day = int(day)
+            year = int(year)
+        except:
+            return apology("event date must be in MM/DD/YYYY format", 400)
+        
+        # Check that color is in hex format
+        if not re.match(r"#[0-9a-fA-F]{6}", event_color):
+            return apology("event color must be in hex format", 400)
+        
+        # Get user id
+        user_id = session["user_id"]
+
+        # Insert new event to SQL table
+        db.execute("INSERT INTO events (user_id, name, event_date, color) VALUES(?, ?, ?, ?)", user_id, event_name, event_date, event_color)
+        
         # Give message to user
         flash("Event added!")
 

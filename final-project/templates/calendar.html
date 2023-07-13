@@ -7,7 +7,194 @@
 {% block main %}
 
 <link href="../static/calendar.css" rel="stylesheet">
-
+<style>
+    /* CSS for the calendar */
+    #calendar {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      width: 500px;
+      margin: 0 auto;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+  
+    th {
+      text-align: center;
+      padding: 10px;
+      background-color: #f2f2f2;
+    }
+  
+    td {
+      text-align: right;
+      padding: 10px;
+      border: 1px solid #ccc;
+      height: 80px;
+      position: relative;
+    }
+  
+    td span {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+  
+    #currentMonth {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+  
+    .navigation-buttons {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+  
+    .navigation-buttons button {
+      margin-right: 5px;
+    }
+  </style>
+  
+  <h1>Monthly Calendar</h1>
+  <div id="calendar"></div>
+  <p id="currentMonth"></p>
+  
+  <script>
+    // Function to generate the calendar
+    function generateCalendar(year, month) {
+      var calendarDiv = document.getElementById("calendar");
+      var date = new Date(year, month - 1, 1);
+      var table = document.createElement("table");
+  
+      // Create table header
+      var headerRow = document.createElement("tr");
+      var daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]; // Start with Monday
+      for (var i = 0; i < 7; i++) {
+        var headerCell = document.createElement("th");
+        headerCell.textContent = daysOfWeek[i];
+        headerRow.appendChild(headerCell);
+      }
+      table.appendChild(headerRow);
+  
+      // Get the first day of the month
+      var startDay = date.getDay();
+  
+      // Adjust start day to Monday if it's Sunday (0)
+      if (startDay === 0) {
+        startDay = 6;
+      } else {
+        startDay--;
+      }
+  
+      // Get the number of days in the month
+      var daysInMonth = new Date(year, month, 0).getDate();
+  
+      // Create the calendar rows
+      var row = document.createElement("tr");
+      for (var i = 0; i < startDay; i++) {
+        var cell = document.createElement("td");
+        row.appendChild(cell);
+      }
+      var day = 1;
+      for (var i = startDay; i < 7; i++) {
+        var cell = document.createElement("td");
+        cell.innerHTML += "<span>" + day + "</span>";
+        row.appendChild(cell);
+        day++;
+      }
+      table.appendChild(row);
+  
+      while (day <= daysInMonth) {
+        var row = document.createElement("tr");
+        for (var i = 0; i < 7; i++) {
+          if (day > daysInMonth) {
+            break;
+          }
+          var cell = document.createElement("td");
+          cell.innerHTML += "<span>" + day + "</span>";
+          row.appendChild(cell);
+          day++;
+        }
+        table.appendChild(row);
+      }
+  
+      // Clear the previous calendar
+      while (calendarDiv.firstChild) {
+        calendarDiv.removeChild(calendarDiv.firstChild);
+      }
+  
+      // Append the new calendar
+      calendarDiv.appendChild(table);
+    }
+  
+    // Get the current year and month
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    var currentMonth = currentDate.getMonth() + 1;
+  
+    // Generate the initial calendar
+    generateCalendar(currentYear, currentMonth);
+  
+    // Function to go to the previous month
+    function previousMonth() {
+      currentMonth--;
+      if (currentMonth < 1) {
+        currentMonth = 12;
+        currentYear--;
+      }
+      generateCalendar(currentYear, currentMonth);
+      updateCurrentMonthText();
+    }
+  
+    // Function to go to the next month
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 12) {
+        currentMonth = 1;
+        currentYear++;
+      }
+      generateCalendar(currentYear, currentMonth);
+      updateCurrentMonthText();
+    }
+  
+    // Function to update the text displaying the current month
+    function updateCurrentMonthText() {
+      var currentMonthText = document.getElementById("currentMonth");
+      currentMonthText.textContent = getCurrentMonthName() + " " + currentYear;
+    }
+  
+    // Function to get the name of the current month
+    function getCurrentMonthName() {
+      var monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      return monthNames[currentMonth - 1];
+    }
+  
+    // Update the text displaying the current month initially
+    updateCurrentMonthText();
+  
+    // Function to go to the current month
+    function goToCurrentMonth() {
+      var today = new Date();
+      currentYear = today.getFullYear();
+      currentMonth = today.getMonth() + 1;
+      generateCalendar(currentYear, currentMonth);
+      updateCurrentMonthText();
+    }
+  </script>
+  
+  <div class="navigation-buttons">
+    <button onclick="previousMonth()">Previous Month</button>
+    <button onclick="goToCurrentMonth()">Today</button>
+    <button onclick="nextMonth()">Next Month</button>
+  </div>
+  
     <form action="/add_event" method="get">
         <button id="addEvent" class="btn btn-primary">Add Event</button>
     </form>
