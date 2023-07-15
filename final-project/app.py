@@ -149,24 +149,19 @@ def calendar():
     """Calendar"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        redirect("/add_event")
+        return redirect("/add_event")
+
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         # Get user id
         user_id = session["user_id"]
 
-        # Get event name from SQL table
-        event_name = db.execute("SELECT name FROM events WHERE user_id = ?", user_id)
+        # Get event details from SQL table
+        event_info = db.execute("SELECT name, event_date, color FROM events WHERE user_id = ?", user_id)
 
-        # Get event date from SQL table
-        event_date = db.execute("SELECT event_date FROM events WHERE user_id = ?", user_id)
+        # Show calendar and pass event_info to the template
+        return render_template("calendar.html", event_info=event_info)
 
-        # Get event color from SQL table
-        event_color = db.execute("SELECT color FROM events WHERE user_id = ?", user_id)
-
-
-        # Show calendar
-        return render_template("calendar.html", name=event_name, date=event_date, color=event_color)
 
 
 @app.route("/add_event", methods=["GET", "POST"])
