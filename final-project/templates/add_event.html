@@ -23,7 +23,7 @@
                             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="event" name="event" placeholder="Enter event name" type="text">
                         </div>
                         <div class="mb-3">
-                            <input autocomplete="off" class="form-control mx-auto w-auto" id="date" name="date" placeholder="Select a date" type="text">
+                            <input autocomplete="off" class="form-control mx-auto w-auto" id="date" name="date" placeholder="Select a start date" type="text">
                         </div>
                         <div class="mb-3">
                             <input type="color" class="form-control form-control-color custom-color-picker" id="color" name="color" value="#4a9eff" placeholder="Choose your color">
@@ -39,8 +39,10 @@
 
 
     <script>
+        // Show datepicker when clicking on input
         $(function() {
             $("#date").datepicker();
+            $("#date_finish").datepicker();
         });
     </script>
 
