@@ -67,3 +67,20 @@
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+
+
+a {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit the color from the parent element */
+}
+
+a:hover {
+  text-decoration: none; /* Remove underline on hover */
+  color: inherit; /* Inherit the color from the parent element on hover */
+}
+
+
+
+
+
+

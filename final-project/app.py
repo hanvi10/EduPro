@@ -1,4 +1,5 @@
 import os
+import re
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -123,6 +124,7 @@ def login():
 
 
 @app.route("/logout")
+@login_required
 def logout():
     """Log user out"""
 
@@ -134,7 +136,122 @@ def logout():
 
 
 @app.route("/pomodoro")
+@login_required
 def pomodoro():
     """Pomodoro"""
 
     return render_template("pomodoro.html")
+
+
+@app.route("/calendar", methods=["GET", "POST"])
+@login_required
+def calendar():
+    """Calendar"""
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+        return redirect("/add_event")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        # Get user id
+        user_id = session["user_id"]
+
+        # Get event details from SQL table
+        event_info = db.execute("SELECT name, event_date, color FROM events WHERE user_id = ?", user_id)
+
+        # Show calendar and pass event_info to the template
+        return render_template("calendar.html", event_info=event_info)
+
+
+
+@app.route("/add_event", methods=["GET", "POST"])
+@login_required
+def add_event():
+    """Add an event to the calendar"""
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+
+        # Get data from form
+        event_name = request.form.get("event")
+        event_date = request.form.get("date")
+        event_color = request.form.get("color")
+
+        # Check that user typed name, date, and color
+        if not event_name:
+            return apology("must provide event name", 400)
+        if not event_date:
+            return apology("must provide event date", 400)
+        if not event_color:
+            return apology("must provide event color", 400)
+
+        # Check that date is in MM/DD/YYYY format
+        if not re.match(r"\d{2}/\d{2}/\d{4}", event_date):
+            return apology("event date must be in MM/DD/YYYY format", 400)
+
+        # Check that date is valid
+        try:
+            month, day, year = event_date.split("/")
+            month = int(month)
+            day = int(day)
+            year = int(year)
+        except:
+            return apology("event date must be in MM/DD/YYYY format", 400)
+        
+        # Check that color is in hex format
+        if not re.match(r"#[0-9a-fA-F]{6}", event_color):
+            return apology("event color must be in hex format", 400)
+        
+        # Get user id
+        user_id = session["user_id"]
+
+        # Insert new event to SQL table
+        db.execute("INSERT INTO events (user_id, name, event_date, color) VALUES(?, ?, ?, ?)", user_id, event_name, event_date, event_color)
+        
+        # Give message to user
+        flash("Event added!")
+
+        # Redirect user to calendar
+        return redirect("/calendar")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("add_event.html")
+    
+
+@app.route("/delete_event", methods=["GET", "POST"])
+@login_required
+def delete_event():
+    """Add an event to the calendar"""
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Get data from form
+        event_delete = request.form.get("deleted_event")
+
+        try:
+            # Delete event from SQL table
+            db.execute("DELETE FROM events WHERE name = ?", event_delete)
+        except:
+            return apology("event does not exist", 400)
+
+        # Give message to user
+        flash("Event deleted!")
+
+        # Redirect user to calendar
+        return redirect("/calendar")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+
+        # Get user id
+        user_id = session["user_id"]
+
+        # Get event names from SQL table to display in dropdown menu
+        event_names = db.execute("SELECT name FROM events WHERE user_id = ?", user_id)
+
+        # Show delete event page and pass event_names to the template
+        return render_template("delete_event.html", names=event_names)
+    

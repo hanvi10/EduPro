@@ -61,6 +61,7 @@
     color: white;
   }
   
+  /* opacity dark background */
   body::after {
     content: "";
     position: absolute;
@@ -68,6 +69,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3); /* Adjust the opacity by changing the last value (0.5 in this example) */
+    background-color: rgba(0, 0, 0, 0.3); /* 0.3 opacity */
     z-index: 1; /* Ensure the layer appears on top of other elements */
   }
