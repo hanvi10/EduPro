@@ -219,3 +219,39 @@ def add_event():
     else:
         return render_template("add_event.html")
     
+
+@app.route("/delete_event", methods=["GET", "POST"])
+@login_required
+def delete_event():
+    """Add an event to the calendar"""
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Get data from form
+        event_delete = request.form.get("deleted_event")
+
+        try:
+            # Delete event from SQL table
+            db.execute("DELETE FROM events WHERE name = ?", event_delete)
+        except:
+            return apology("event does not exist", 400)
+
+        # Give message to user
+        flash("Event deleted!")
+
+        # Redirect user to calendar
+        return redirect("/calendar")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+
+        # Get user id
+        user_id = session["user_id"]
+
+        # Get event names from SQL table to display in dropdown menu
+        event_names = db.execute("SELECT name FROM events WHERE user_id = ?", user_id)
+
+        # Show delete event page and pass event_names to the template
+        return render_template("delete_event.html", names=event_names)
+    
