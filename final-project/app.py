@@ -138,9 +138,55 @@ def logout():
 @app.route("/pomodoro")
 @login_required
 def pomodoro():
-    """Pomodoro"""
+    """Pomodoro timer"""
 
-    return render_template("pomodoro.html")
+    # Get user id
+    user_id = session["user_id"]
+
+    # Select study, short, and long break from SQL table
+    settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
+
+    # Check if user has settings
+    if not settings:
+
+        # Insert default settings to SQL table
+        db.execute("INSERT INTO pomodoro (user_id, study, short, long) VALUES(?, ?, ?, ?)", user_id, 25, 5, 10)
+
+        # Select study, short, and long break from SQL table
+        settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
+
+    study = settings[0]["study"]
+    short = settings[0]["short"]
+    long = settings[0]["long"]
+    
+    # Show settings and pass settings to the template
+    return render_template("pomodoro.html", html_study=study, html_short=short, html_long=long)
+
+
+@app.route("/settings", methods=["GET", "POST"])
+@login_required
+def settings():
+    """Settings for pomodoro timer"""
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Get data from form
+        study = request.form.get("study")
+        short = request.form.get("shortBreak")
+        long = request.form.get("longBreak")
+
+        # Get user id
+        user_id = session["user_id"]
+
+        # Update new settings in SQL table
+        db.execute("UPDATE pomodoro SET study = ?, short = ?, long = ? WHERE user_id = ?", study, short, long, user_id)
+
+        return redirect("/pomodoro")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("settings.html")
 
 
 @app.route("/calendar", methods=["GET", "POST"])
@@ -149,6 +195,7 @@ def calendar():
     """Calendar"""
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+
         return redirect("/add_event")
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -171,7 +218,6 @@ def add_event():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-
 
         # Get data from form
         event_name = request.form.get("event")

@@ -58,31 +58,48 @@
             var nav = document.getElementById("mySidenav");
             var buttonText = document.querySelectorAll("#buttonText");
             var buttons = document.querySelectorAll("#mySidenav button");
+
             // close nav
             if (getComputedStyle(nav).width === "230px") {
-              nav.style.width = "80px"; // change nav width to smaller size
+
+              // change nav width to smaller size
+              nav.style.width = "80px"; 
+
               // hide text
               buttonText.forEach(function(button) {
                 button.style.display = "none"; 
               });
+
               // buttons
               buttons.forEach(function(button) {
-                button.style.width = "60px"; // change button width
+                // change button width
+                button.style.width = "60px";
+
+                // align content to the center 
                 setTimeout(function() {
-                  button.style.justifyContent = "center"; // center horizontally
-                  button.style.alignItems = "center"; // center vertically
+                  button.style.justifyContent = "center"; 
+                  button.style.alignItems = "center"; 
                 }, 150); // 150 milliseconds delay (0.15 seconds)
               });
+
               // open nav
             } else {
-              nav.style.width = "230px"; //change nav width to larger size
+
+              //change nav width to larger size
+              nav.style.width = "230px"; 
+
               // buttons
               buttons.forEach(function(button) {
-                button.style.width = "210px"; // change button width 
-                button.style.justifyContent = "flex-start"; // align content to the left
-                button.style.alignItems = ""; // reset vertical alignment
-             
+                // change button width 
+                button.style.width = "210px"; 
+
+                // align content to the left
+                button.style.justifyContent = "flex-start";
+
+                // reset vertical alignment
+                button.style.alignItems = "";
               });
+
               // show text after a delay
               setTimeout(function() {
                 buttonText.forEach(function(button) {
@@ -94,7 +111,7 @@
         </script>
         {% endif %}
 
-
+        <!-- Flashed messages -->
         {% if get_flashed_messages() %}
           <header>
               <div id="alertMessage" class="alert alert-primary mb-0 text-center" role="alert">

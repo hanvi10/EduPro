@@ -1,5 +1,5 @@
 /* clock and buttons */
-.watch {
+  .watch {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -17,13 +17,14 @@
     text-align: center;
   }
   
-  /* clock buttons */
+/* all clock buttons */
   .controls {
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
+/* top clock buttons */
   #topControls button {
     appearance: none;
     background: none;
@@ -40,12 +41,14 @@
     transition: 0.2s;
     box-shadow: 0 0 0 1px white;
   }
-  
+
+/* top clock buttons when hover */
   #topControls button:hover {
     background-color: white;
     color: black;
   }
 
+/* top clock buttons when active */
   #topControls button.active {
     background-color: white;
     color: black;
@@ -64,7 +67,7 @@
     color: white;
 }
   
-  /* opacity dark background */
+/* opacity layer dark background */
   body::after {
     content: "";
     position: absolute;
@@ -72,6 +75,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* 0.3 opacity */
-    z-index: 1; /* Ensure the layer appears on top of other elements */
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
   }
+
