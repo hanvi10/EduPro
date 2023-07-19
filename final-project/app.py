@@ -155,6 +155,7 @@ def pomodoro():
         # Select study, short, and long break from SQL table
         settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
 
+    # Get values from list of dictionaries from SQL table
     study = settings[0]["study"]
     short = settings[0]["short"]
     long = settings[0]["long"]
@@ -186,7 +187,18 @@ def settings():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("settings.html")
+        # Get user id
+        user_id = session["user_id"]
+
+        # Select study, short, and long break from SQL table to display in form
+        settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
+
+        # Get values from list of dictionaries from SQL table
+        study = settings[0]["study"]
+        short = settings[0]["short"]
+        long = settings[0]["long"]
+
+        return render_template("settings.html", html_study=study, html_short=short, html_long=long)
 
 
 @app.route("/calendar", methods=["GET", "POST"])

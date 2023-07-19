@@ -10,14 +10,33 @@
             <div class="col-md-6 col-xl-4">
                 <div class="card mb-5">
                     <div class="card-body d-flex flex-column align-items-center">
-                        <form class="text-center" action="/settings" method="post">
-                            <div class="mb-3"><input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="study" name="study" type="number" min="1" max="480"></div>
-                            <div class="mb-3"><input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="shortBreak" name="shortBreak" type="number" min="1" max="480"></div>
-                            <div class="mb-3"><input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="longBreak" name="longBreak" type="number" min="1" max="480"></div>
-                            <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Confirm</button></div>
+                        <form class="text-left" action="/settings" method="post">
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center">
+                                    <label for="study" class="me-2" style="white-space: nowrap;">Study:</label>
+                                    <input value="{{ html_study }}" autocomplete="off" autofocus class="form-control" id="study" name="study" type="number" min="1" max="480">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center">
+                                    <label for="shortBreak" class="me-2" style="white-space: nowrap;">Short Break:</label>
+                                    <input value="{{ html_short }}" autocomplete="off" autofocus class="form-control" id="shortBreak" name="shortBreak" type="number" min="1" max="480">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center">
+                                    <label for="longBreak" class="me-2" style="white-space: nowrap;">Long Break:</label>
+                                    <input value="{{ html_long }}" autocomplete="off" autofocus class="form-control" id="longBreak" name="longBreak" type="number" min="1" max="480">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary d-block w-100" type="submit">Confirm</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+        
+        
 {% endblock %}
