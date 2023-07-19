@@ -9,7 +9,7 @@
     <link href="../static/pomodoro.css" rel="stylesheet">
 
     <div class="watch">
-        <div class="controls">
+        <div class="controls" id="topControls">
             <button id="study">Study</button>
             <button id="shortBreak">Short Break</button>
             <button id="longBreak">Long Break</button>
@@ -17,9 +17,10 @@
         <div class="time">
           00:00
         </div>
-        <div class="controls">
-          <button id="startStop">Start</button>
-          <button id="reset">Reset</button>
+        <div class="controls" id="bottomControls">
+          <button id="startStop"><i class="bi bi-play-fill"></i></button>
+          <button id="reset"><i class="bi bi-arrow-clockwise"></i></button>
+          <button id="settings"><i class="bi bi-gear-fill"></i></button>
         </div>
     </div>
 
@@ -133,7 +134,7 @@
           clearInterval(interval);
           interval = null;
           running = false;
-          startStop_btn.innerText = "Start";
+          startStop_btn.innerHTML = '<i class="bi bi-play-fill"></i>';
       }
       
       function startStop () {
@@ -150,7 +151,7 @@
               if (seconds > 0) {
               interval = setInterval(timer, 1000);
               running = true;
-              startStop_btn.innerText = "Stop";
+              startStop_btn.innerHTML = '<i class="bi bi-pause-fill"></i>';
               }
           }
       }
