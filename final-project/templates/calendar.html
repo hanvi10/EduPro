@@ -7,7 +7,7 @@
 {% block main %}
 
 <link href="../static/calendar.css" rel="stylesheet">
-<div class="ui container">
+<div id="all_calendar" class="ui container">
   <div class="ui container">
     <div class="ui grid">
       <div class="ui sixteen column">
@@ -16,12 +16,22 @@
     </div>
   </div>
   </div>
+    <form action="/add_event" method="get">
+      <button id="addEvent" class="btn btn-primary">Add Event</button>
+    </form>
+    <form action="/delete_event" method="get">
+      <button id="deleteEvent" class="btn btn-primary">Delete Event</button>
+    </form>
+  <div>
+</div>
+
+<script src='fullcalendar/dist/index.global.js'></script>
   <script>
     $(document).ready(function() {
     
         $('#calendar').fullCalendar({
           header: {
-            left: 'prev,next today',
+            left: 'prev,next today ',
             center: 'title',
             right: 'month,basicWeek'
           },
@@ -45,11 +55,6 @@
       });
   </script>
   
-    <form action="/add_event" method="get">
-        <button id="addEvent" class="btn btn-primary">Add Event</button>
-    </form>
-    <form action="/delete_event" method="get">
-        <button id="deleteEvent" class="btn btn-primary">Delete Event</button>
-    </form>
+
 
 {% endblock %}
