@@ -1,6 +1,14 @@
-/* calendar_custom.css */
 #all_calendar {
     max-width: 80%; 
     margin-left: 200px;
+
+}
+
+#buttonContainer {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    justify-content: flex-end;
+
 }
   
