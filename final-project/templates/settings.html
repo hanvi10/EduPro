@@ -30,8 +30,21 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <button class="btn btn-primary d-block w-100" type="submit">Confirm</button>
+                                <button class="btn btn-primary d-block w-100" type="submit" name="action" value="pomodoro">Confirm</button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-5">
+                    <div class="card-body d-flex flex-column align-items-center">
+                        <form class="text-left" action="/settings" method="post">
+                            <div class="mb-3"><input autocomplete="off" class="form-control mx-auto w-auto" id="username" name="username" class="form-control" type="text" value="{{ html_username }}" aria-label="Disabled input example" disabled readonly></div>
+                            <div class="mb-3"><input class="form-control mx-auto w-auto" id="new_password" name="new_password" placeholder="New password" type="password"></div>
+                            <div class="mb-3"><input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Confirm new password" type="password"></div>
+                            <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" name="action" value="change">Change password</button></div>
                         </form>
                     </div>
                 </div>

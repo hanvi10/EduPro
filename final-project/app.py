@@ -40,13 +40,11 @@ def signup():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+
         # Get data from register form
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
-
-        # Generate hash
-        hash = generate_password_hash(password)
 
         # Ensure there is username
         if not username:
@@ -63,6 +61,9 @@ def signup():
         # Ensure password and confirmation password match
         if password != confirmation:
             return apology("password does not match confirmation", 400)
+        
+        # Generate hash
+        hash = generate_password_hash(password)
 
         # Ensure that username does not exist
         try:
@@ -93,6 +94,7 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+
         # Ensure username was submitted
         if not request.form.get("username"):
             return apology("must provide username", 403)
@@ -167,40 +169,87 @@ def pomodoro():
 @app.route("/settings", methods=["GET", "POST"])
 @login_required
 def settings():
-    """Settings for pomodoro timer"""
-
+    """Settings"""
+    
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # Get data from form
-        study = request.form.get("study")
-        short = request.form.get("shortBreak")
-        long = request.form.get("longBreak")
+        # If the pomodoro settings were changed
+        if request.form['action'] == 'pomodoro':
 
-        # Get user id
-        user_id = session["user_id"]
+            # Get data from form
+            study = request.form.get("study")
+            short = request.form.get("shortBreak")
+            long = request.form.get("longBreak")
 
-        # Update new settings in SQL table
-        db.execute("UPDATE pomodoro SET study = ?, short = ?, long = ? WHERE user_id = ?", study, short, long, user_id)
+            # Get user id
+            user_id = session["user_id"]
 
-        return redirect("/pomodoro")
+            # Update new settings in SQL table
+            db.execute("UPDATE pomodoro SET study = ?, short = ?, long = ? WHERE user_id = ?", study, short, long, user_id)
 
+            # Give message to user
+            flash("Pomodoro settings updated!")
+
+            # Stay on settings page
+            return redirect("/settings")
+        
+        # If the password was changed
+        elif request.form['action'] == 'change':
+
+            # Get data from form
+            new_password = request.form.get("new_password")
+            confirmation = request.form.get("confirmation")
+
+            # Ensure there is password
+            if not new_password:
+                return apology("must provide a new password", 400)
+
+            # Ensure there is confirmation password
+            if not confirmation:
+                return apology("must provide confirmation password", 400)
+
+            # Ensure password and confirmation password match
+            if new_password != confirmation:
+                return apology("new password does not match confirmation", 400)
+
+            # Get user id
+            user_id = session["user_id"]
+
+            # Generate hash
+            hash = generate_password_hash(new_password)
+
+            # Update new settings in SQL table
+            db.execute("UPDATE users SET hash = ? WHERE id = ?", hash, user_id)
+
+            # Give message to user
+            flash("Password changed!")
+
+            # Stay on settings page
+            return redirect("/settings")
+    
     # User reached route via GET (as by clicking a link or via redirect)
     else:
+
         # Get user id
         user_id = session["user_id"]
 
         # Select study, short, and long break from SQL table to display in form
         settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
 
+        # Get username to display in form
+        username_db = db.execute("SELECT username FROM users WHERE id = ?", user_id)
+
         # Get values from list of dictionaries from SQL table
         study = settings[0]["study"]
         short = settings[0]["short"]
         long = settings[0]["long"]
+        username = username_db[0]["username"]
 
-        return render_template("settings.html", html_study=study, html_short=short, html_long=long)
-
-
+        return render_template("settings.html", html_study=study, html_short=short, html_long=long, html_username=username)
+      
+    
+# Calendar routes
 @app.route("/calendar", methods=["GET", "POST"])
 @login_required
 def calendar():
@@ -220,7 +269,6 @@ def calendar():
 
         # Show calendar and pass event_info to the template
         return render_template("calendar.html", event_info=event_info)
-
 
 
 @app.route("/add_event", methods=["GET", "POST"])
