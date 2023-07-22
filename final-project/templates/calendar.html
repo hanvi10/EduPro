@@ -30,15 +30,15 @@
     
         $('#calendar').fullCalendar({
           header: {
-            left: 'prev,next today ',
+            left: 'today',
             center: 'title',
-            right: 'month,basicWeek'
+            right: 'prev,next'
           },
           defaultDate: moment().format('YYYY-MM-DD'),
           navLinks: true, // can click day/week names to navigate views
           editable: false, // cannot edit events on calendar
           eventLimit: true, // allow "more" link when too many events
-          displayEventTime: true, // show the time display
+          displayEventTime: false, // don't show the time display
           firstDay: 1, // Monday as the starting day
           eventColor: "#4a9eff",
           events: [

@@ -48,19 +48,19 @@ def signup():
 
         # Ensure there is username
         if not username:
-            return apology("must provide username", 400)
+            return apology("Must provide username", 400)
 
         # Ensure there is password
         if not password:
-            return apology("must provide password", 400)
+            return apology("Must provide password", 400)
 
         # Ensure there is confirmation password
         if not confirmation:
-            return apology("must provide confirmation password", 400)
+            return apology("Must provide confirmation password", 400)
 
         # Ensure password and confirmation password match
         if password != confirmation:
-            return apology("password does not match confirmation", 400)
+            return apology("Password does not match confirmation", 400)
         
         # Generate hash
         hash = generate_password_hash(password)
@@ -72,7 +72,7 @@ def signup():
                 "INSERT INTO users (username, hash) VALUES(?, ?)", username, hash
             )
         except:
-            return apology("username already in use", 400)
+            return apology("Username already in use", 400)
 
         # Remember which user has logged in
         session["user_id"] = user
@@ -97,11 +97,11 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("Must provide username", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return apology("Must provide password", 403)
 
         # Query database for username
         rows = db.execute(
@@ -112,7 +112,7 @@ def login():
         if len(rows) != 1 or not check_password_hash(
             rows[0]["hash"], request.form.get("password")
         ):
-            return apology("invalid username and/or password", 403)
+            return apology("Invalid username and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -182,6 +182,18 @@ def settings():
             short = request.form.get("shortBreak")
             long = request.form.get("longBreak")
 
+            # Ensure there is study time
+            if not study:
+                return apology("Must provide study time", 400)
+            
+            # Ensure there is short break time
+            if not short:
+                return apology("Must provide short break time", 400)
+            
+            # Ensure there is long break time
+            if not long:
+                return apology("Must provide long break time", 400)
+
             # Get user id
             user_id = session["user_id"]
 
@@ -203,15 +215,15 @@ def settings():
 
             # Ensure there is password
             if not new_password:
-                return apology("must provide a new password", 400)
+                return apology("Must provide a new password", 400)
 
             # Ensure there is confirmation password
             if not confirmation:
-                return apology("must provide confirmation password", 400)
+                return apology("Must provide confirmation password", 400)
 
             # Ensure password and confirmation password match
             if new_password != confirmation:
-                return apology("new password does not match confirmation", 400)
+                return apology("New password does not match confirmation", 400)
 
             # Get user id
             user_id = session["user_id"]
@@ -286,15 +298,15 @@ def add_event():
 
         # Check that user typed name, date, and color
         if not event_name:
-            return apology("must provide event name", 400)
+            return apology("Must provide event name", 400)
         if not event_date:
-            return apology("must provide event date", 400)
+            return apology("Must provide event date", 400)
         if not event_color:
-            return apology("must provide event color", 400)
+            return apology("Must provide event color", 400)
 
         # Check that date is in MM/DD/YYYY format
         if not re.match(r"\d{2}/\d{2}/\d{4}", event_date):
-            return apology("event date must be in MM/DD/YYYY format", 400)
+            return apology("Event date must be in MM/DD/YYYY format", 400)
 
         # Check that date is valid
         try:
@@ -303,11 +315,11 @@ def add_event():
             day = int(day)
             year = int(year)
         except:
-            return apology("event date must be in MM/DD/YYYY format", 400)
+            return apology("Event date must be in MM/DD/YYYY format", 400)
         
         # Check that color is in hex format
         if not re.match(r"#[0-9a-fA-F]{6}", event_color):
-            return apology("event color must be in hex format", 400)
+            return apology("Event color must be in hex format", 400)
         
         # Get user id
         user_id = session["user_id"]
@@ -341,7 +353,7 @@ def delete_event():
             # Delete event from SQL table
             db.execute("DELETE FROM events WHERE name = ?", event_delete)
         except:
-            return apology("event does not exist", 400)
+            return apology("Event does not exist", 400)
 
         # Give message to user
         flash("Event deleted!")

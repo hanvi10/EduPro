@@ -23,7 +23,6 @@
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #000000;
   display: block;
   transition: 0.2s;
   width: 210px; /* Adjust the width to accommodate margins */
@@ -36,17 +35,16 @@
   padding: 8px 8px 8px 20px; /* Adjust the left padding */
   display: flex; /* Use flexbox for alignment */
   align-items: center; /* Vertically align the icon and text */
-  background-color: #e3e3e3;
 }
 
+/* Bootstrap icons inside buttons */
 .sidenav button i {
   margin-right: 10px; 
-  color: #4a9eff;
 }
 
-/* When you mouse over the navigation links, change their color */
-.sidenav button:hover {
-  background-color: #efefef;
+/* Apply the hover effect to all buttons inside #mySidenav except the first one */
+#mySidenav button:not(:first-child):hover {
+  filter: brightness(90%); 
 }
 
 /* Settings and Log out at the bottom */
