@@ -67,6 +67,13 @@
   color: white;
 }
 
+/* top clock buttons when hover */
+#bottomControls button i:hover {
+  filter: brightness(80%);
+  transition: 0.2s;
+}
+
+
 /* opacity layer dark background */
 body::after {
   content: "";

@@ -36,7 +36,7 @@
   padding: 8px 8px 8px 20px; /* Adjust the left padding */
   display: flex; /* Use flexbox for alignment */
   align-items: center; /* Vertically align the icon and text */
-  background-color: #ffffff;
+  background-color: #e3e3e3;
 }
 
 .sidenav button i {
@@ -46,7 +46,7 @@
 
 /* When you mouse over the navigation links, change their color */
 .sidenav button:hover {
-  background-color: #e3ecf2;
+  background-color: #efefef;
 }
 
 /* Settings and Log out at the bottom */
