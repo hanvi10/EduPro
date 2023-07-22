@@ -7,6 +7,7 @@
 {% block main %}
 
     <link href="../static/pomodoro.css" rel="stylesheet">
+
     <!-- The clock -->
     <div class="watch">
         <div class="controls" id="topControls">
@@ -23,6 +24,12 @@
                 <button id="settings" type="submit"><a href="/settings"><i class="bi bi-gear-fill"></i></a></button>
             </div>
     </div>
+
+    <!-- Sound for when the clock gets to 0 -->
+    <audio id="alarmSound">
+        <source src="https://www.dropbox.com/s/8i93omunntmzbdf/alarm.mp3?raw=1" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
 
     <script>
@@ -87,7 +94,6 @@
             study_btn.classList.add("active");
             study();
             changeBackground();
-            closeForm();
         });
 
         function study() {
@@ -128,8 +134,15 @@
             // Check if seconds is less than or equal to 0
             if (seconds <= 0) {
                 stop();
+                playAlarmSound();
             }
         }
+
+        // Play alarm sound
+        function playAlarmSound() {
+            const alarmSound = document.getElementById("alarmSound");
+            alarmSound.play();
+          }
         
         function stop () {
             clearInterval(interval);
