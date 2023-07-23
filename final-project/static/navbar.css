@@ -43,8 +43,8 @@
 }
 
 /* Apply the hover effect to all buttons inside #mySidenav except the first one */
-#mySidenav button:not(:first-child):hover {
-  filter: brightness(90%); 
+.effect-button:hover {
+  filter: brightness(90%);
 }
 
 /* Settings and Log out at the bottom */
@@ -77,7 +77,10 @@ a:hover {
   color: inherit; /* Inherit the color from the parent element on hover */
 }
 
-
+/* Define the font-family for the custom-font-button class */
+.custom-font-button {
+  font-family: 'Montserrat', sans-serif;
+}
 
 
 

@@ -1,12 +1,16 @@
-/* all */
-* {
-  font-family: Helvetica, sans-serif;
+
+
+body h2 {
+  font-size: 3rem;
+  margin-bottom: 25px; 
 }
+
 body {
   background-image: url("");
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 
 
 

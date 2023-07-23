@@ -1,0 +1,26 @@
+h1 {
+    margin-bottom: 35px; 
+}
+
+div {
+    margin: 0;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.slogan {
+    font-weight: 600;
+    font-size: 3.9rem;
+}
+
+.highlight {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 4.3rem;
+    font-weight: 900;
+    color: #0D6EFD; 
+    
+}
+
