@@ -31,7 +31,7 @@ def homepage():
     # Forget any user_id
     session.clear()
 
-    return render_template("homepage.html")
+    return render_template("index.html")
 
 
 @app.route("/signup", methods=["GET", "POST"])
