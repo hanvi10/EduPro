@@ -1,11 +1,12 @@
 import os
 import re
 
-from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 from helpers import login_required, apology
 
@@ -20,9 +21,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///final.db")
-
+# Configure SQLAlchemy
+engine = create_engine("sqlite:///final.db")
+db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def homepage():
@@ -66,16 +67,20 @@ def signup():
         hash = generate_password_hash(password)
 
         # Ensure that username does not exist
-        try:
-            # Insert new user to SQL table
-            user = db.execute(
-                "INSERT INTO users (username, hash) VALUES(?, ?)", username, hash
-            )
-        except:
+        existing_user = db.execute(
+            text("SELECT * FROM users WHERE username = :username"),
+            {"username": username}
+        ).fetchone()
+        
+        if existing_user:
             return apology("Username already in use", 400)
 
-        # Remember which user has logged in
-        session["user_id"] = user
+        # Insert new user into the users table
+        db.execute(
+            text("INSERT INTO users (username, hash) VALUES (:username, :hash)"),
+            {"username": username, "hash": hash}
+        )
+        db.commit()
 
         # Redirect user to application
         return redirect("/pomodoro")
@@ -83,7 +88,6 @@ def signup():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("signup.html")
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -104,18 +108,17 @@ def login():
             return apology("Must provide password", 403)
 
         # Query database for username
-        rows = db.execute(
-            "SELECT * FROM users WHERE username = ?", request.form.get("username")
-        )
+        user = db.execute(
+            text("SELECT * FROM users WHERE username = :username"),
+            {"username": request.form.get("username")}
+        ).fetchone()
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(
-            rows[0]["hash"], request.form.get("password")
-        ):
+        if user is None or not check_password_hash(user[2], request.form.get("password")):
             return apology("Invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = user[0]
 
         # Redirect user to application
         return redirect("/pomodoro")
@@ -146,21 +149,30 @@ def pomodoro():
     user_id = session["user_id"]
 
     # Select study, short, and long break from SQL table
-    settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
+    settings = db.execute(
+        text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"),
+        {"user_id": user_id}
+    ).fetchone()
 
     # Check if user has settings
     if not settings:
-
         # Insert default settings to SQL table
-        db.execute("INSERT INTO pomodoro (user_id, study, short, long) VALUES(?, ?, ?, ?)", user_id, 25, 5, 10)
+        db.execute(
+            text("INSERT INTO pomodoro (user_id, study, short, long) VALUES (:user_id, :study, :short, :long)"), 
+            {"user_id": user_id, "study": 25, "short": 5, "long": 10}
+        )
+        db.commit()
 
         # Select study, short, and long break from SQL table
-        settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
+        settings = db.execute(
+            text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"),
+            {"user_id": user_id}
+        ).fetchone()
 
-    # Get values from list of dictionaries from SQL table
-    study = settings[0]["study"]
-    short = settings[0]["short"]
-    long = settings[0]["long"]
+    # Get values from the fetched row
+    study = settings[0]  # Index 0 corresponds to "study"
+    short = settings[1]  # Index 1 corresponds to "short"
+    long = settings[2]   # Index 2 corresponds to "long"
     
     # Show settings and pass settings to the template
     return render_template("pomodoro.html", html_study=study, html_short=short, html_long=long)
@@ -198,7 +210,11 @@ def settings():
             user_id = session["user_id"]
 
             # Update new settings in SQL table
-            db.execute("UPDATE pomodoro SET study = ?, short = ?, long = ? WHERE user_id = ?", study, short, long, user_id)
+            db.execute(
+                text("UPDATE pomodoro SET study = :study, short = :short, long = :long WHERE user_id = :user_id"),
+                {"study": study, "short": short, "long": long, "user_id": user_id}
+            )
+            db.commit()
 
             # Give message to user
             flash("Pomodoro settings updated!")
@@ -232,7 +248,11 @@ def settings():
             hash = generate_password_hash(new_password)
 
             # Update new settings in SQL table
-            db.execute("UPDATE users SET hash = ? WHERE id = ?", hash, user_id)
+            db.execute(
+                text("UPDATE users SET hash = :new_hash WHERE id = :user_id"),
+                {"new_hash": hash, "user_id": user_id}
+            )
+            db.commit()
 
             # Give message to user
             flash("Password changed!")
@@ -247,40 +267,41 @@ def settings():
         user_id = session["user_id"]
 
         # Select study, short, and long break from SQL table to display in form
-        settings = db.execute("SELECT study, short, long FROM pomodoro WHERE user_id = ?", user_id)
+        settings = db.execute(
+            text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"), 
+            {"user_id": user_id}
+        ).fetchone()
 
         # Get username to display in form
-        username_db = db.execute("SELECT username FROM users WHERE id = ?", user_id)
+        username_db = db.execute(text("SELECT username FROM users WHERE id = :user_id"),
+            {"user_id": user_id}
+        ).fetchone()
 
-        # Get values from list of dictionaries from SQL table
-        study = settings[0]["study"]
-        short = settings[0]["short"]
-        long = settings[0]["long"]
-        username = username_db[0]["username"]
+        # Get values from the fetched row
+        study = settings[0]  # Index 0 corresponds to "study"
+        short = settings[1]  # Index 1 corresponds to "short"
+        long = settings[2]   # Index 2 corresponds to "long"
 
-        return render_template("settings.html", html_study=study, html_short=short, html_long=long, html_username=username)
+        return render_template("settings.html", html_study=study, html_short=short, html_long=long, html_username=username_db[0])
       
     
 # Calendar routes
-@app.route("/calendar", methods=["GET", "POST"])
+@app.route("/calendar")
 @login_required
 def calendar():
     """Calendar"""
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
 
-        return redirect("/add_event")
+    # Get user id
+    user_id = session["user_id"]
 
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        # Get user id
-        user_id = session["user_id"]
+    # Get event details from SQL table
+    event_info = db.execute(
+        text("SELECT name, event_date, color FROM events WHERE user_id = :user_id"), 
+        {"user_id": user_id}
+    )
 
-        # Get event details from SQL table
-        event_info = db.execute("SELECT name, event_date, color FROM events WHERE user_id = ?", user_id)
-
-        # Show calendar and pass event_info to the template
-        return render_template("calendar.html", event_info=event_info)
+    # Show calendar and pass event_info to the template
+    return render_template("calendar.html", event_info=event_info)
 
 
 @app.route("/add_event", methods=["GET", "POST"])
@@ -325,8 +346,12 @@ def add_event():
         user_id = session["user_id"]
 
         # Insert new event to SQL table
-        db.execute("INSERT INTO events (user_id, name, event_date, color) VALUES(?, ?, ?, ?)", user_id, event_name, event_date, event_color)
-        
+        db.execute(
+            text("INSERT INTO events (user_id, name, event_date, color) VALUES(:user_id, :event_name, :event_date, :event_color)"),
+            {"user_id": user_id, "event_name": event_name, "event_date": event_date, "event_color": event_color}
+        )
+        db.commit()
+
         # Give message to user
         flash("Event added!")
 
@@ -351,7 +376,11 @@ def delete_event():
 
         try:
             # Delete event from SQL table
-            db.execute("DELETE FROM events WHERE name = ?", event_delete)
+            db.execute(
+                text("DELETE FROM events WHERE name = :event_delete"),
+                {"event_delete": event_delete}
+            )
+            db.commit()
         except:
             return apology("Event does not exist", 400)
 
@@ -368,7 +397,10 @@ def delete_event():
         user_id = session["user_id"]
 
         # Get event names from SQL table to display in dropdown menu
-        event_names = db.execute("SELECT name FROM events WHERE user_id = ?", user_id)
+        event_names = db.execute(
+            text("SELECT name FROM events WHERE user_id = :user_id"),
+            {"user_id": user_id}
+        )
 
         # Show delete event page and pass event_names to the template
         return render_template("delete_event.html", names=event_names)
