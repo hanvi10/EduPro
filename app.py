@@ -83,7 +83,7 @@ def signup():
         db.commit()
 
         # Redirect user to application
-        return redirect("/pomodoro")
+        return redirect("/timer")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -121,7 +121,7 @@ def login():
         session["user_id"] = user[0]
 
         # Redirect user to application
-        return redirect("/pomodoro")
+        return redirect("/timer")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -140,10 +140,10 @@ def logout():
     return redirect("/")
 
 
-@app.route("/pomodoro")
+@app.route("/timer")
 @login_required
-def pomodoro():
-    """Pomodoro timer"""
+def timer():
+    """Timer"""
 
     # Get user id
     user_id = session["user_id"]
@@ -175,7 +175,7 @@ def pomodoro():
     long = settings[2]   # Index 2 corresponds to "long"
     
     # Show settings and pass settings to the template
-    return render_template("pomodoro.html", html_study=study, html_short=short, html_long=long)
+    return render_template("timer.html", html_study=study, html_short=short, html_long=long)
 
 
 @app.route("/settings", methods=["GET", "POST"])
@@ -186,8 +186,8 @@ def settings():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # If the pomodoro settings were changed
-        if request.form['action'] == 'pomodoro':
+        # If the timer settings were changed
+        if request.form['action'] == 'timer':
 
             # Get data from form
             study = request.form.get("study")
@@ -217,7 +217,7 @@ def settings():
             db.commit()
 
             # Give message to user
-            flash("Pomodoro settings updated!")
+            flash("Timer settings updated!")
 
             # Stay on settings page
             return redirect("/settings")

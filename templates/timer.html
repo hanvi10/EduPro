@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Pomodoro
+    Timer
 {% endblock %}
 
 {% block main %}
 
-    <link href="../static/pomodoro.css" rel="stylesheet">
+    <link href="../static/timer.css" rel="stylesheet">
 
     <!-- The clock -->
     <div class="watch">
@@ -48,7 +48,7 @@
         let input_seconds;
         let seconds;
         let interval = null;
-        let pomodoroMin = {{ html_study }};
+        let timerMin = {{ html_study }};
         let shortBreakMin = {{ html_short }};
         let longBreakMin = {{ html_long }};
 
@@ -109,7 +109,7 @@
 
         function study() {
             stop();
-            input_seconds = pomodoroMin * 60;
+            input_seconds = timerMin * 60;
             seconds = input_seconds;
             stopTime = 0;
             updateDisplay();
