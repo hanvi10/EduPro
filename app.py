@@ -82,12 +82,22 @@ def signup():
         )
         db.commit()
 
+        # Select user id from SQL table
+        user = db.execute(
+            text("SELECT id FROM users WHERE username = :username"),
+            {"username": username}
+        ).fetchone()
+
+        # Remember which user has logged in
+        session["user_id"] = user[0]
+
         # Redirect user to application
         return redirect("/timer")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("signup.html")
+    
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
