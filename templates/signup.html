@@ -15,13 +15,19 @@
                             </svg></div>
                         <form class="text-center" action="/signup" method="post">
                             <div class="mb-3"><input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text" required></div>
-                            <div class="mb-3"><input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password" required></div>
+                            <div class="mb-3"><input onclick="myFunction()" class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password" required></div>
                             <div class="mb-3"><input class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm password" type="password" required></div>
-                            <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Register</button></div>
+                            <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Sign Up</button></div>
                         </form>
                         <p class="text-muted">Already have an account? <a href="/login">Log in</a></p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            function myFunction() {
+              alert("Do not use a password that you use on other sites, this site is for research purposes and it is not secure.");
+            }
+        </script>
 {% endblock %}
