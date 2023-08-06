@@ -188,113 +188,111 @@ def timer():
     return render_template("timer.html", html_study=study, html_short=short, html_long=long)
 
 
-@app.route("/settings", methods=["GET", "POST"])
+@app.route("/settings")
 @login_required
 def settings():
     """Settings"""
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Select study, short, and long break from SQL table to display in form
+    settings = db.execute(
+        text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"), 
+        {"user_id": user_id}
+    ).fetchone()
+
+    # Get username to display in form
+    username_db = db.execute(text("SELECT username FROM users WHERE id = :user_id"),
+        {"user_id": user_id}
+    ).fetchone()
+
+    # Get values from the fetched row
+    study = settings[0]  # Index 0 corresponds to "study"
+    short = settings[1]  # Index 1 corresponds to "short"
+    long = settings[2]   # Index 2 corresponds to "long"
+
+    return render_template("settings.html", html_study=study, html_short=short, html_long=long, html_username=username_db[0])
     
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
 
-        # If the timer settings were changed
-        if request.form['action'] == 'timer':
+@app.route("/timer_settings", methods=["POST"])
+@login_required
+def timer_settings():
+    """Timer settings"""
+    # Get data from form
+    study = request.form.get("study")
+    short = request.form.get("shortBreak")
+    long = request.form.get("longBreak")
 
-            # Get data from form
-            study = request.form.get("study")
-            short = request.form.get("shortBreak")
-            long = request.form.get("longBreak")
-
-            # Ensure there is study time
-            if not study:
-                return apology("Must provide study time", 400)
-            
-            # Ensure there is short break time
-            if not short:
-                return apology("Must provide short break time", 400)
-            
-            # Ensure there is long break time
-            if not long:
-                return apology("Must provide long break time", 400)
-
-            # Get user id
-            user_id = session["user_id"]
-
-            # Update new settings in SQL table
-            db.execute(
-                text("UPDATE pomodoro SET study = :study, short = :short, long = :long WHERE user_id = :user_id"),
-                {"study": study, "short": short, "long": long, "user_id": user_id}
-            )
-            db.commit()
-
-            # Give message to user
-            flash("Timer settings updated!")
-
-            # Stay on settings page
-            return redirect("/settings")
-        
-        # If the password was changed
-        elif request.form['action'] == 'change':
-
-            # Get data from form
-            new_password = request.form.get("new_password")
-            confirmation = request.form.get("confirmation")
-
-            # Ensure there is password
-            if not new_password:
-                return apology("Must provide a new password", 400)
-
-            # Ensure there is confirmation password
-            if not confirmation:
-                return apology("Must provide confirmation password", 400)
-
-            # Ensure password and confirmation password match
-            if new_password != confirmation:
-                return apology("New password does not match confirmation", 400)
-
-            # Get user id
-            user_id = session["user_id"]
-
-            # Generate hash
-            hash = generate_password_hash(new_password)
-
-            # Update new settings in SQL table
-            db.execute(
-                text("UPDATE users SET hash = :new_hash WHERE id = :user_id"),
-                {"new_hash": hash, "user_id": user_id}
-            )
-            db.commit()
-
-            # Give message to user
-            flash("Password changed!")
-
-            # Stay on settings page
-            return redirect("/settings")
+    # Ensure there is study time
+    if not study:
+        return apology("Must provide study time", 400)
     
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-
-        # Get user id
-        user_id = session["user_id"]
-
-        # Select study, short, and long break from SQL table to display in form
-        settings = db.execute(
-            text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"), 
-            {"user_id": user_id}
-        ).fetchone()
-
-        # Get username to display in form
-        username_db = db.execute(text("SELECT username FROM users WHERE id = :user_id"),
-            {"user_id": user_id}
-        ).fetchone()
-
-        # Get values from the fetched row
-        study = settings[0]  # Index 0 corresponds to "study"
-        short = settings[1]  # Index 1 corresponds to "short"
-        long = settings[2]   # Index 2 corresponds to "long"
-
-        return render_template("settings.html", html_study=study, html_short=short, html_long=long, html_username=username_db[0])
-      
+    # Ensure there is short break time
+    if not short:
+        return apology("Must provide short break time", 400)
     
+    # Ensure there is long break time
+    if not long:
+        return apology("Must provide long break time", 400)
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Update new settings in SQL table
+    db.execute(
+        text("UPDATE pomodoro SET study = :study, short = :short, long = :long WHERE user_id = :user_id"),
+        {"study": study, "short": short, "long": long, "user_id": user_id}
+    )
+    db.commit()
+
+    # Give message to user
+    flash("Timer settings updated!")
+
+    # Stay on settings page
+    return redirect("/settings")
+
+
+@app.route("/change_password", methods=["POST"])
+@login_required
+def change_password():
+    """Change password"""
+
+    # Get data from form
+    new_password = request.form.get("new_password")
+    confirmation = request.form.get("confirmation")
+
+    # Ensure there is password
+    if not new_password:
+        return apology("Must provide a new password", 400)
+
+    # Ensure there is confirmation password
+    if not confirmation:
+        return apology("Must provide confirmation password", 400)
+
+    # Ensure password and confirmation password match
+    if new_password != confirmation:
+        return apology("New password does not match confirmation", 400)
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Generate hash
+    hash = generate_password_hash(new_password)
+
+    # Update new settings in SQL table
+    db.execute(
+        text("UPDATE users SET hash = :new_hash WHERE id = :user_id"),
+        {"new_hash": hash, "user_id": user_id}
+    )
+    db.commit()
+
+    # Give message to user
+    flash("Password changed!")
+
+    # Stay on settings page
+    return redirect("/settings")
+
 # Calendar routes
 @app.route("/calendar")
 @login_required
@@ -414,4 +412,10 @@ def delete_event():
 
         # Show delete event page and pass event_names to the template
         return render_template("delete_event.html", names=event_names)
-    
+
+
+@app.route("/todo")
+@login_required
+def todo():
+    """Todo list"""
+    return render_template("todo.html")
