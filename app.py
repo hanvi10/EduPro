@@ -382,11 +382,14 @@ def delete_event():
         # Get data from form
         event_delete = request.form.get("deleted_event")
 
+        # Get user id
+        user_id = session["user_id"]
+
         try:
             # Delete event from SQL table
             db.execute(
-                text("DELETE FROM events WHERE name = :event_delete"),
-                {"event_delete": event_delete}
+                text("DELETE FROM events WHERE name = :event_delete AND user_id = :user_id"),
+                {"event_delete": event_delete, "user_id": user_id}
             )
             db.commit()
         except:
@@ -418,4 +421,79 @@ def delete_event():
 @login_required
 def todo():
     """Todo list"""
-    return render_template("todo.html")
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Get event details from SQL table
+    tasks_info = db.execute(
+        text("SELECT task_id, task_name, completed FROM tasks WHERE user_id = :user_id"), 
+        {"user_id": user_id}
+    )
+
+    return render_template("todo.html", tasks_html = tasks_info)
+
+
+@app.route("/add_todo", methods=["POST"])
+@login_required
+def add_todo():
+    """Add item to todo list"""
+
+    # Get todo item from form
+    todo_title = request.form.get("title")
+
+    # Check for title
+    if not todo_title:
+        return apology("Must provide task title", 400)
+    
+    # Check task title length
+    if len(todo_title) > 50:
+        return apology("Task title must be 50 characters or fewer", 400)
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Insert it into SQL database
+    db.execute(
+        text("INSERT INTO tasks (task_name, user_id) VALUES(:task_name, :user_id) "),
+        {"task_name": todo_title, "user_id": user_id}
+    )
+    db.commit()
+
+    return redirect('/todo')
+
+
+@app.route("/update_todo/<id>")
+@login_required
+def update_todo(id):
+    """Complete item in todo list"""
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Update to-do in SQL database
+    db.execute(
+        text("UPDATE tasks SET completed = 1 WHERE task_id = :task_id AND user_id = :user_id"),
+        {"task_id": id, "user_id": user_id}
+    )
+    db.commit()
+
+    return redirect('/todo')
+
+
+@app.route("/delete_todo/<id>")
+@login_required
+def delete_todo(id):
+    """Complete item in todo list"""
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Delete to-do in SQL database
+    db.execute(
+        text("DELETE FROM tasks WHERE task_id = :task_id AND user_id = :user_id"),
+        {"task_id": id, "user_id": user_id}
+    )
+    db.commit()
+
+    return redirect('/todo')
