@@ -46,20 +46,20 @@
             <button onclick="openCloseNav()" class="btn btn-primary custom-font-button"><a>
               <i class="bi bi-list"></i><span id="buttonText">EduPro</span>
             </a></button>
-            <button class="effect-button"><a href="/timer">
+            <button class="nav_button effect-button"><a href="/timer">
               <i class="bi bi-clock"></i><span id="buttonText">Timer</span>
             </a></button>
-            <button class="effect-button"><a href="/calendar">
+            <button class="nav_button effect-button"><a href="/calendar">
               <i class="bi bi-calendar"></i><span id="buttonText">Calendar</span>
             </a></button>
-            <button class="effect-button"><a href="/todo">
+            <button class="nav_button effect-button"><a href="/todo">
               <i class="bi bi-list-check"></i><span id="buttonText">To-do</span>
             </a></button>
             <div class="bottom-links">
-              <button class="effect-button"><a href="/settings">
+              <button class="nav_button effect-button"><a href="/settings">
                 <i class="bi bi-gear-fill"></i><span id="buttonText">Settings</span>
               </a></button>
-              <button class="effect-button"><a href="/logout">
+              <button class="nav_button effect-button"><a href="/logout">
                 <i class="bi bi-box-arrow-left"></i><span id="buttonText">Log out</span>
               </a></button>
             </div>
@@ -123,6 +123,24 @@
               }, 150); // 150 milliseconds delay (0.15 seconds)
             }
           }
+
+        // Make nav button active for each page
+
+        // Get navbar buttons
+        const navBtns = document.querySelectorAll('.sidenav .nav_button');
+
+        // Get the current page URL
+        const currentPage = window.location.pathname;
+
+        // for each button check if the href of the button inlcudes the current page pathname
+        navBtns.forEach(navBtn => {
+          const link = navBtn.querySelector('a');
+          if (link && link.getAttribute('href').includes(currentPage)) {
+            // If it does add the class nav-active
+            navBtn.classList.add('nav-active');
+          }
+        });
+
         </script>
         {% endif %}
 

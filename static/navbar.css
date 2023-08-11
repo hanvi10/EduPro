@@ -44,7 +44,11 @@
 
 /* Apply the hover effect to all buttons inside #mySidenav except the first one */
 .effect-button:hover {
-  filter: brightness(90%);
+  filter: brightness(80%);
+}
+
+.nav-active {
+  filter: brightness(80%);
 }
 
 /* Settings and Log out at the bottom */
