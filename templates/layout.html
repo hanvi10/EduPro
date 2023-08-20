@@ -1,179 +1,208 @@
 <!DOCTYPE html>
 
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <head>
+    <title>{% block title %}{% endblock %}</title>
 
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../static/main.css" rel="stylesheet" />
 
-      <title>{% block title %}{% endblock %}</title>
+    <!-- https://getbootstrap.com/ -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
 
-      <link href="../static/main.css" rel="stylesheet">
+    <!-- https://icons.getbootstrap.com/ -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
 
-      <!-- https://getbootstrap.com/ -->
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Import jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-      <!-- https://icons.getbootstrap.com/ -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Import FullCalendar library -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 
-      <!-- Import jQuery library -->
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-      <!-- Import FullCalendar library -->
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+  <body>
+    <!-- https://getbootstrap.com/ -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
 
-      <!-- Google font -->
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <!-- if user logged in -->
+    {% if session["user_id"] %}
 
-    </head>
+    <!-- navbar -->
+    <link href="../static/navbar.css" rel="stylesheet" />
+    <nav>
+      <div id="mySidenav" class="sidenav">
+        <button
+          onclick="openCloseNav()"
+          class="btn btn-primary custom-font-button"
+        >
+          <a> <i class="bi bi-list"></i><span id="buttonText">EduPro</span> </a>
+        </button>
+        <button class="nav_button effect-button">
+          <a href="/timer">
+            <i class="bi bi-clock"></i><span id="buttonText">Timer</span>
+          </a>
+        </button>
+        <button class="nav_button effect-button">
+          <a href="/calendar">
+            <i class="bi bi-calendar"></i><span id="buttonText">Calendar</span>
+          </a>
+        </button>
+        <button class="nav_button effect-button">
+          <a href="/todo">
+            <i class="bi bi-list-check"></i><span id="buttonText">To-do</span>
+          </a>
+        </button>
+        <div class="bottom-links">
+          <button class="nav_button effect-button">
+            <a href="/settings">
+              <i class="bi bi-gear-fill"></i
+              ><span id="buttonText">Settings</span>
+            </a>
+          </button>
+          <button class="nav_button effect-button">
+            <a href="/logout">
+              <i class="bi bi-box-arrow-left"></i
+              ><span id="buttonText">Log out</span>
+            </a>
+          </button>
+        </div>
+      </div>
+    </nav>
 
-    <body>    
-        <!-- https://getbootstrap.com/ -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-        
-        <!-- if user logged in -->
-        {% if session["user_id"] %}
+    <script>
+      // function to open and close nav
+      function openCloseNav() {
+        // get nav, button text, and buttons from the html
+        var nav = document.getElementById("mySidenav");
+        var buttonText = document.querySelectorAll("#buttonText");
+        var buttons = document.querySelectorAll("#mySidenav button");
 
-        <!-- navbar -->
-        <link href="../static/navbar.css" rel="stylesheet">
-        <nav>
-          <div id="mySidenav" class="sidenav">
-            <button onclick="openCloseNav()" class="btn btn-primary custom-font-button"><a>
-              <i class="bi bi-list"></i><span id="buttonText">EduPro</span>
-            </a></button>
-            <button class="nav_button effect-button"><a href="/timer">
-              <i class="bi bi-clock"></i><span id="buttonText">Timer</span>
-            </a></button>
-            <button class="nav_button effect-button"><a href="/calendar">
-              <i class="bi bi-calendar"></i><span id="buttonText">Calendar</span>
-            </a></button>
-            <button class="nav_button effect-button"><a href="/todo">
-              <i class="bi bi-list-check"></i><span id="buttonText">To-do</span>
-            </a></button>
-            <div class="bottom-links">
-              <button class="nav_button effect-button"><a href="/settings">
-                <i class="bi bi-gear-fill"></i><span id="buttonText">Settings</span>
-              </a></button>
-              <button class="nav_button effect-button"><a href="/logout">
-                <i class="bi bi-box-arrow-left"></i><span id="buttonText">Log out</span>
-              </a></button>
-            </div>
-          </div>
-        </nav>
+        // close nav
+        if (getComputedStyle(nav).width === "230px") {
+          // change nav width to smaller size
+          nav.style.width = "80px";
 
-        <script>
-          // function to open and close nav
-          function openCloseNav() {
-            // get nav, button text, and buttons from the html
-            var nav = document.getElementById("mySidenav");
-            var buttonText = document.querySelectorAll("#buttonText");
-            var buttons = document.querySelectorAll("#mySidenav button");
+          // hide text
+          buttonText.forEach(function (button) {
+            button.style.display = "none";
+          });
 
-            // close nav
-            if (getComputedStyle(nav).width === "230px") {
+          // buttons
+          buttons.forEach(function (button) {
+            // change button width
+            button.style.width = "60px";
 
-              // change nav width to smaller size
-              nav.style.width = "80px"; 
+            // align content to the center
+            setTimeout(function () {
+              button.style.justifyContent = "center";
+              button.style.alignItems = "center";
+            }, 150); // 150 milliseconds delay (0.15 seconds)
+          });
 
-              // hide text
-              buttonText.forEach(function(button) {
-                button.style.display = "none"; 
-              });
+          // open nav
+        } else {
+          //change nav width to larger size
+          nav.style.width = "230px";
 
-              // buttons
-              buttons.forEach(function(button) {
-                // change button width
-                button.style.width = "60px";
+          // buttons
+          buttons.forEach(function (button) {
+            // change button width
+            button.style.width = "210px";
 
-                // align content to the center 
-                setTimeout(function() {
-                  button.style.justifyContent = "center"; 
-                  button.style.alignItems = "center"; 
-                }, 150); // 150 milliseconds delay (0.15 seconds)
-              });
+            // align content to the left
+            button.style.justifyContent = "flex-start";
 
-              // open nav
-            } else {
+            // reset vertical alignment
+            button.style.alignItems = "";
+          });
 
-              //change nav width to larger size
-              nav.style.width = "230px";
-
-              // buttons
-              buttons.forEach(function(button) {
-                // change button width 
-                button.style.width = "210px"; 
-
-                // align content to the left
-                button.style.justifyContent = "flex-start";
-
-                // reset vertical alignment
-                button.style.alignItems = "";
-              });
-
-              // show text after a delay
-              setTimeout(function() {
-                buttonText.forEach(function(button) {
-                  button.style.display = "inline";
-                });
-              }, 150); // 150 milliseconds delay (0.15 seconds)
-            }
-          }
-
-        // Make nav button active for each page
-
-        // Get navbar buttons
-        const navBtns = document.querySelectorAll('.sidenav .nav_button');
-
-        // Get the current page URL
-        const currentPage = window.location.pathname;
-
-        // for each button check if the href of the button inlcudes the current page pathname
-        navBtns.forEach(navBtn => {
-          const link = navBtn.querySelector('a');
-          if (link && link.getAttribute('href').includes(currentPage)) {
-            // If it does add the class nav-active
-            navBtn.classList.add('nav-active');
-          }
-        });
-
-        </script>
-        {% endif %}
-
-        <!-- Flashed messages -->
-        {% if get_flashed_messages() %}
-          <header>
-              <div id="alertMessage" class="alert alert-primary mb-0 text-center" role="alert">
-                  {{ get_flashed_messages() | join(" ") }}
-              </div>
-          </header>
-        {% endif %}
-        
-        <!-- Javasript for flashed messages -->
-        <script>
-          // Stay for 5 seconds
-            // Wait for the DOM to load
-            document.addEventListener('DOMContentLoaded', function() {
-                // Get the alert element
-                var alertElement = document.getElementById('alertMessage');
-                
-                // Set a timeout to remove the alert after 5 seconds
-                setTimeout(function() {
-                    if (alertElement) {
-                        alertElement.remove();
-                    }
-                }, 5000); // 5000 milliseconds = 5 seconds
+          // show text after a delay
+          setTimeout(function () {
+            buttonText.forEach(function (button) {
+              button.style.display = "inline";
             });
-        </script>
-    
+          }, 150); // 150 milliseconds delay (0.15 seconds)
+        }
+      }
 
-        <main id="main" class="container-fluid py-5 text-center">
-            {% block main %}{% endblock %}
-        </main>
-    </body>
+      // Make nav button active for each page
 
+      // Get navbar buttons
+      const navBtns = document.querySelectorAll(".sidenav .nav_button");
+
+      // Get the current page URL
+      const currentPage = window.location.pathname;
+
+      // for each button check if the href of the button inlcudes the current page pathname
+      navBtns.forEach((navBtn) => {
+        const link = navBtn.querySelector("a");
+        if (link && link.getAttribute("href").includes(currentPage)) {
+          // If it does add the class nav-active
+          navBtn.classList.add("nav-active");
+        }
+      });
+    </script>
+    {% endif %}
+
+    <!-- Flashed messages -->
+    {% if get_flashed_messages() %}
+    <header>
+      <div
+        id="alertMessage"
+        class="alert alert-primary mb-0 text-center"
+        role="alert"
+      >
+        {{ get_flashed_messages() | join(" ") }}
+      </div>
+    </header>
+    {% endif %}
+
+    <!-- Javasript for flashed messages -->
+    <script>
+      // Stay for 5 seconds
+      // Wait for the DOM to load
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the alert element
+        var alertElement = document.getElementById("alertMessage");
+
+        // Set a timeout to remove the alert after 5 seconds
+        setTimeout(function () {
+          if (alertElement) {
+            alertElement.remove();
+          }
+        }, 5000); // 5000 milliseconds = 5 seconds
+      });
+    </script>
+
+    <main id="main" class="container-fluid py-5 text-center">
+      {% block main %}{% endblock %}
+    </main>
+  </body>
 </html>

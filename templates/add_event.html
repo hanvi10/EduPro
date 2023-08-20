@@ -1,50 +1,71 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %} Add Event {% endblock %} {% block
+main %}
 
-{% block title %}
-    Add Event
-{% endblock %}
+<!-- links for datepicker -->
+<link
+  rel="stylesheet"
+  href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-{% block main %}    
-    <!-- links for datepicker -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<h2>Add Event</h2>
 
-
-    <h2>Add Event</h2>
-
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-5">
-                <div class="card-body d-flex flex-column align-items-center">
-                    <form class="text-center" action="/add_event" method="post">
-                        <div class="mb-3">
-                            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="event" name="event" placeholder="Enter event name" type="text" required>
-                        </div>
-                        <div class="mb-3">
-                            <input autocomplete="off" class="form-control mx-auto w-auto" id="date" name="date" placeholder="Select a start date" type="text" required>
-                        </div>
-                        <div class="mb-3">
-                            <input type="color" class="form-control form-control-color custom-color-picker" id="color" name="color" value="#4a9eff" placeholder="Choose your color">
-                        </div>
-                        <div class="mb-3">
-                            <button class="btn btn-primary d-block w-100" type="submit">Add Event</button>
-                        </div>
-                    </form>                
-                </div>
-            </div>
-        </div>
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6 col-xl-4">
+    <div class="card mb-5">
+      <div class="card-body d-flex flex-column align-items-center">
+        <form class="text-center" action="/add_event" method="post">
+          <div class="mb-3">
+            <input
+              autocomplete="off"
+              autofocus
+              class="form-control mx-auto w-auto"
+              id="event"
+              name="event"
+              placeholder="Enter event name"
+              type="text"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <input
+              autocomplete="off"
+              class="form-control mx-auto w-auto"
+              id="date"
+              name="date"
+              placeholder="Select a start date"
+              type="text"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <input
+              type="color"
+              class="form-control form-control-color custom-color-picker"
+              id="color"
+              name="color"
+              value="#4a9eff"
+              placeholder="Choose your color"
+            />
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-primary d-block w-100" type="submit">
+              Add Event
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
+</div>
 
-
-    <script>
-        // Show datepicker when clicking on input
-        $(function() {
-            $("#date").datepicker();
-            $("#date_finish").datepicker();
-        });
-    </script>
-
-
+<script>
+  // Show datepicker when clicking on input
+  $(function () {
+    $("#date").datepicker();
+    $("#date_finish").datepicker();
+  });
+</script>
 
 {% endblock %}

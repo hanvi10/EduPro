@@ -1,13 +1,11 @@
 #all_calendar {
-    max-width: 75%; 
-    margin-left: 200px;
+  max-width: 75%;
+  margin-left: 200px;
 }
-
 
 #buttonContainer {
-    display: flex;
-    gap: 20px;
-    padding: 10px;
-    justify-content: flex-end;
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  justify-content: flex-end;
 }
-  
