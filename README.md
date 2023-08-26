@@ -4,6 +4,7 @@
 
 #### Description:
 
+
 EduPro is a user-friendly and intuitive Flask web application designed to assist students in enhancing their study habits and productivity. The app combines two essential tools – a timer and a calendar – to create an optimal environment for effective learning. With EduPro, students can manage their study sessions more efficiently and stay organized throughout their academic journey.
 
 ## Features
@@ -31,6 +32,7 @@ EduPro is a user-friendly and intuitive Flask web application designed to assist
 5. **Settings**: Change the settings of your timer for an enhanced expirience and change your password if needed.
 
 6. **Log out**: When you're done using EduPro, log out of your account to ensure your privacy and security. Click on the "Log out" button to end your session.
+
 
 ## Structure
 
@@ -82,3 +84,4 @@ EduPro was developed by Han Virgili Phan. I acknowledge the contributions of var
 If you encounter any issues, have suggestions, or need assistance, please [submit an issue](https://github.com/hanvi10/edupro/issues) on our GitHub repository.
 
 We hope EduPro significantly enhances your study experience and helps you achieve academic success. Happy studying!
+
