@@ -1,57 +1,126 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %} Settings {% endblock %} {% block
+main %}
 
-{% block title %}
-    Settings
-{% endblock %}
+<h2>Settings</h2>
 
-{% block main %}
-        <h2>Settings</h2>
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-6 col-xl-4">
-                <h3>Timer settings</h3>
-                <div class="card mb-5">
-                    <div class="card-body d-flex flex-column align-items-center">
-                        <form class="text-left" action="/settings" method="post">
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center">
-                                    <label for="study" class="me-2" style="white-space: nowrap;">Study:</label>
-                                    <input value="{{ html_study }}" autocomplete="off" class="form-control" id="study" name="study" type="number" min="1" max="480" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center">
-                                    <label for="shortBreak" class="me-2" style="white-space: nowrap;">Short Break:</label>
-                                    <input value="{{ html_short }}" autocomplete="off" class="form-control" id="shortBreak" name="shortBreak" type="number" min="1" max="480" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center">
-                                    <label for="longBreak" class="me-2" style="white-space: nowrap;">Long Break:</label>
-                                    <input value="{{ html_long }}" autocomplete="off" class="form-control" id="longBreak" name="longBreak" type="number" min="1" max="480" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-primary d-block w-100" type="submit" name="action" value="timer">Confirm</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6 col-xl-4">
+    <h3>Timer settings</h3>
+    <div class="card mb-5">
+      <div class="card-body d-flex flex-column align-items-center">
+        <form class="text-left" action="/timer_settings" method="post">
+          <div class="mb-3">
+            <div class="d-flex align-items-center">
+              <label for="study" class="me-2" style="white-space: nowrap"
+                >Study:</label
+              >
+              <input
+                value="{{ html_study }}"
+                autocomplete="off"
+                class="form-control"
+                id="study"
+                name="study"
+                type="number"
+                min="1"
+                max="480"
+                required
+              />
             </div>
-
-            <div class="col-md-6 col-xl-4">
-                <h3>Change password</h3>
-                <div class="card mb-5">
-                    <div class="card-body d-flex flex-column align-items-center">
-                        <form class="text-left" action="/settings" method="post">
-                            <div class="mb-3"><input autocomplete="off" class="form-control mx-auto w-auto" id="username" name="username" class="form-control" type="text" value="{{ html_username }}" aria-label="Disabled input example" disabled readonly></div>
-                            <div class="mb-3"><input class="form-control mx-auto w-auto" id="new_password" name="new_password" placeholder="New password" type="password" required></div>
-                            <div class="mb-3"><input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Confirm new password" type="password" required></div>
-                            <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit" name="action" value="change">Change password</button></div>
-                        </form>
-                    </div>
-                </div>
+          </div>
+          <div class="mb-3">
+            <div class="d-flex align-items-center">
+              <label for="shortBreak" class="me-2" style="white-space: nowrap"
+                >Short Break:</label
+              >
+              <input
+                value="{{ html_short }}"
+                autocomplete="off"
+                class="form-control"
+                id="shortBreak"
+                name="shortBreak"
+                type="number"
+                min="1"
+                max="480"
+                required
+              />
             </div>
-        </div>
-        
-        
+          </div>
+          <div class="mb-3">
+            <div class="d-flex align-items-center">
+              <label for="longBreak" class="me-2" style="white-space: nowrap"
+                >Long Break:</label
+              >
+              <input
+                value="{{ html_long }}"
+                autocomplete="off"
+                class="form-control"
+                id="longBreak"
+                name="longBreak"
+                type="number"
+                min="1"
+                max="480"
+                required
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-primary d-block w-100" type="submit">
+              Confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-4">
+    <h3>Change password</h3>
+    <div class="card mb-5">
+      <div class="card-body d-flex flex-column align-items-center">
+        <form class="text-left" action="/change_password" method="post">
+          <div class="mb-3">
+            <input
+              autocomplete="off"
+              class="form-control mx-auto w-auto"
+              id="username"
+              name="username"
+              class="form-control"
+              type="text"
+              value="{{ html_username }}"
+              aria-label="Disabled input example"
+              disabled
+              readonly
+            />
+          </div>
+          <div class="mb-3">
+            <input
+              class="form-control mx-auto w-auto"
+              id="new_password"
+              name="new_password"
+              placeholder="New password"
+              type="password"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <input
+              class="form-control mx-auto w-auto"
+              id="confirmation"
+              name="confirmation"
+              placeholder="Confirm new password"
+              type="password"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-primary d-block w-100" type="submit">
+              Change password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

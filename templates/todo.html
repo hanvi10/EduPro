@@ -1,0 +1,61 @@
+{% extends "layout.html" %} {% block title %} To-do {% endblock %} {% block main
+%}
+
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6 col-xl-4">
+    <h3>To-do list</h3>
+    <div class="card mb-5">
+      <div class="card-body d-flex flex-column align-items-center">
+        <form class="text-left" action="/add_todo" method="post">
+          <div class="mb-3">
+            <input
+              autocomplete="off"
+              class="form-control mx-auto w-auto"
+              id="title"
+              name="title"
+              placeholder="Title"
+              type="text"
+              maxlength="50"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-primary d-block w-100" type="submit">
+              Add todo
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-5">
+      <ul class="list-unstyled">
+        {% for task in tasks_html %}
+        <li class="d-flex mb-3 align-items-center">
+          <!-- Added 'align-items-center' class for vertical alignment -->
+          <div class="flex-grow-1 fs-5">
+            {% if task[2] == 0 %}
+            <!-- If task is NOT completed -->
+            {{ task[1] }} {% else %}
+            <!-- Task is completed -->
+            <s>{{ task[1] }}</s>
+            {% endif %}
+          </div>
+          <button class="btn btn-primary me-2">
+            <a href="/update_todo/{{ task[0] }}" class="text-white">Complete</a>
+          </button>
+          <button class="btn btn-danger">
+            <a href="/delete_todo/{{ task[0] }}" class="text-white">Delete</a>
+          </button>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

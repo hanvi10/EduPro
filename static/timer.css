@@ -58,7 +58,7 @@
 #bottomControls button {
   background-color: transparent;
   border: none;
-  font-size: 32.5px; 
+  font-size: 32.5px;
   margin-right: 20px;
 }
 
@@ -73,7 +73,6 @@
   transition: 0.2s;
 }
 
-
 /* opacity layer dark background */
 body::after {
   content: "";
@@ -87,5 +86,5 @@ body::after {
 }
 
 audio {
-display: none;
+  display: none;
 }
