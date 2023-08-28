@@ -302,6 +302,9 @@ def delete_event():
         if not delete_id:
             return apology("Must select event information", 400)
 
+        if delete_id == "selected":
+            return apology("Must select event information", 400)
+
         # Get user id
         user_id = session["user_id"]
 
