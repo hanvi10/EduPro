@@ -8,20 +8,19 @@
 			<div class="card-body d-flex flex-column align-items-center">
 				<form class="text-center" action="/delete_event" method="post">
 					<div class="mb-3">
-						<input
-							class="form-control"
-							list="datalistOptions"
+						<select
+							class="form-select"
+							aria-label="Default select example"
 							name="deleted_event"
-							id="deleted_event"
-							placeholder="Enter event name"
-							autocomplete="off"
-							required />
-						<datalist id="datalistOptions">
+							id="deleted_event">
+							<option selected>Select an event</option>
+
 							{% for item in data %}
-							<option value="{{ item['name'] }}   {{ item['event_date'] }}">
-								{% endfor %}
+							<option value="{{ item['event_id'] }}">
+								{{ item['name'] }} {{ item['event_date'] }}
 							</option>
-						</datalist>
+							{% endfor %}
+						</select>
 					</div>
 					<div class="mb-3">
 						<button class="btn btn-primary d-block w-100" type="submit">

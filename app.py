@@ -296,77 +296,25 @@ def delete_event():
     if request.method == "POST":
 
         # Get data from form
-        event_delete = request.form.get("deleted_event")
+        delete_id = request.form.get("deleted_event")
 
         # Check for input
-        if not event_delete:
-            return apology("Must provide event information", 400)
-
-        try:
-            # Separate name and date from the input string
-            event_delete_split = event_delete.split("   ")
-            name_to_delete = event_delete_split[0]
-            date_to_delete = event_delete_split[1]
-        except IndexError:
-            return apology("Must provide event info as displayed in list", 400)
-
-        # Check that input is in correct format
-        if not name_to_delete:
-            return apology("Must provide event name", 400)
-
-        if not date_to_delete:
-            return apology("Must provide event date", 400)
-
-        if not re.match(r"\d{2}/\d{2}/\d{4}", date_to_delete):
-            return apology("Event date must be in MM/DD/YYYY format", 400)
+        if not delete_id:
+            return apology("Must select event information", 400)
 
         # Get user id
         user_id = session["user_id"]
 
-        # Select event names
-        event_names = db.execute(
-            text("SELECT name FROM events WHERE user_id = :user_id"),
+        # Delete event
+        db.execute(
+            text(
+                "DELETE FROM events WHERE event_id = :delete_id AND user_id = :user_id"),
             {
+                "delete_id": delete_id,
                 "user_id": user_id
             }
-        ).fetchall()
-
-        # Extract the names from the result set and store them in a separate list
-        names = [row[0] for row in event_names]
-
-        # Check if event_delete matches any element in the names list
-        if name_to_delete in names:
-
-            # Check if the data exists before attempting deletion
-            result = db.execute(
-                text("SELECT COUNT(*) FROM events WHERE name = :name_to_delete AND event_date = :date_to_delete AND user_id = :user_id"),
-                {
-                    "name_to_delete": name_to_delete,
-                    "date_to_delete": date_to_delete,
-                    "user_id": user_id
-                }
-            )
-            row_count = result.scalar()
-
-            if row_count > 0:
-
-                # Data exists, proceed with deletion
-                db.execute(
-                    text(
-                        "DELETE FROM events WHERE name = :name_to_delete AND event_date = :date_to_delete AND user_id = :user_id"),
-                    {
-                        "name_to_delete": name_to_delete,
-                        "date_to_delete": date_to_delete,
-                        "user_id": user_id
-                    }
-                )
-                db.commit()
-
-            else:
-                return apology("Event does not exist", 400)
-
-        else:
-            return apology("Event does not exist", 400)
+        )
+        db.commit()
 
         # Give message to user
         flash("Event deleted!")
@@ -382,7 +330,7 @@ def delete_event():
 
         # Get event names from SQL table to display in dropdown menu
         event_data = db.execute(
-            text("SELECT name, event_date FROM events WHERE user_id = :user_id"),
+            text("SELECT event_id, name, event_date FROM events WHERE user_id = :user_id"),
             {
                 "user_id": user_id
             }
