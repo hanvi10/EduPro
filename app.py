@@ -68,7 +68,9 @@ def signup():
         # Ensure that username does not exist
         existing_user = db.execute(
             text("SELECT * FROM users WHERE username = :username"),
-            {"username": username}
+            {
+                "username": username
+            }
         ).fetchone()
 
         if existing_user:
@@ -77,14 +79,19 @@ def signup():
         # Insert new user into the users table
         db.execute(
             text("INSERT INTO users (username, hash) VALUES (:username, :hash)"),
-            {"username": username, "hash": hash}
+            {
+                "username": username,
+                "hash": hash
+            }
         )
         db.commit()
 
         # Select user id from SQL table
         user = db.execute(
             text("SELECT id FROM users WHERE username = :username"),
-            {"username": username}
+            {
+                "username": username
+            }
         ).fetchone()
 
         # Remember which user has logged in
@@ -119,7 +126,9 @@ def login():
         # Query database for username
         user = db.execute(
             text("SELECT * FROM users WHERE username = :username"),
-            {"username": request.form.get("username")}
+            {
+                "username": request.form.get("username")
+            }
         ).fetchone()
 
         # Ensure username exists and password is correct
@@ -160,7 +169,9 @@ def timer():
     # Select study, short, and long break from SQL table
     settings = db.execute(
         text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"),
-        {"user_id": user_id}
+        {
+            "user_id": user_id
+        }
     ).fetchone()
 
     # Check if user has settings
@@ -168,14 +179,21 @@ def timer():
         # Insert default settings to SQL table
         db.execute(
             text("INSERT INTO pomodoro (user_id, study, short, long) VALUES (:user_id, :study, :short, :long)"),
-            {"user_id": user_id, "study": 25, "short": 5, "long": 10}
+            {
+                "user_id": user_id,
+                "study": 25,
+                "short": 5,
+                "long": 10
+            }
         )
         db.commit()
 
         # Select study, short, and long break from SQL table
         settings = db.execute(
             text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"),
-            {"user_id": user_id}
+            {
+                "user_id": user_id
+            }
         ).fetchone()
 
     # Get values from the fetched row
@@ -184,112 +202,6 @@ def timer():
     long = settings[2]   # Index 2 corresponds to "long"
 
     return render_template("timer.html", html_study=study, html_short=short, html_long=long)
-
-
-@app.route("/settings")
-@login_required
-def settings():
-    """Settings"""
-
-    # Get user id
-    user_id = session["user_id"]
-
-    # Select study, short, and long break from SQL table to display in form
-    settings = db.execute(
-        text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"),
-        {"user_id": user_id}
-    ).fetchone()
-
-    # Get username to display in form
-    username_db = db.execute(text("SELECT username FROM users WHERE id = :user_id"),
-                             {"user_id": user_id}
-                             ).fetchone()
-
-    # Get values from the fetched row
-    study = settings[0]  # Index 0 corresponds to "study"
-    short = settings[1]  # Index 1 corresponds to "short"
-    long = settings[2]   # Index 2 corresponds to "long"
-
-    return render_template("settings.html", html_study=study, html_short=short, html_long=long, html_username=username_db[0])
-
-
-@app.route("/timer_settings", methods=["POST"])
-@login_required
-def timer_settings():
-    """Timer settings"""
-    # Get data from form
-    study = request.form.get("study")
-    short = request.form.get("shortBreak")
-    long = request.form.get("longBreak")
-
-    # Ensure there is study time
-    if not study:
-        return apology("Must provide study time", 400)
-
-    # Ensure there is short break time
-    if not short:
-        return apology("Must provide short break time", 400)
-
-    # Ensure there is long break time
-    if not long:
-        return apology("Must provide long break time", 400)
-
-    # Get user id
-    user_id = session["user_id"]
-
-    # Update new settings in SQL table
-    db.execute(
-        text("UPDATE pomodoro SET study = :study, short = :short, long = :long WHERE user_id = :user_id"),
-        {"study": study, "short": short, "long": long, "user_id": user_id}
-    )
-    db.commit()
-
-    # Give message to user
-    flash("Timer settings updated!")
-
-    # Stay on settings page
-    return redirect("/settings")
-
-
-@app.route("/change_password", methods=["POST"])
-@login_required
-def change_password():
-    """Change password"""
-
-    # Get data from form
-    new_password = request.form.get("new_password")
-    confirmation = request.form.get("confirmation")
-
-    # Ensure there is password
-    if not new_password:
-        return apology("Must provide a new password", 400)
-
-    # Ensure there is confirmation password
-    if not confirmation:
-        return apology("Must provide confirmation password", 400)
-
-    # Ensure password and confirmation password match
-    if new_password != confirmation:
-        return apology("New password does not match confirmation", 400)
-
-    # Get user id
-    user_id = session["user_id"]
-
-    # Generate hash
-    hash = generate_password_hash(new_password)
-
-    # Update new settings in SQL table
-    db.execute(
-        text("UPDATE users SET hash = :new_hash WHERE id = :user_id"),
-        {"new_hash": hash, "user_id": user_id}
-    )
-    db.commit()
-
-    # Give message to user
-    flash("Password changed!")
-
-    # Stay on settings page
-    return redirect("/settings")
 
 
 @app.route("/calendar")
@@ -303,7 +215,9 @@ def calendar():
     # Get event details from SQL table
     event_info = db.execute(
         text("SELECT name, event_date, color FROM events WHERE user_id = :user_id"),
-        {"user_id": user_id}
+        {
+            "user_id": user_id
+        }
     )
 
     return render_template("calendar.html", event_info=event_info)
@@ -353,8 +267,12 @@ def add_event():
         # Insert new event to SQL table
         db.execute(
             text("INSERT INTO events (user_id, name, event_date, color) VALUES(:user_id, :event_name, :event_date, :event_color)"),
-            {"user_id": user_id, "event_name": event_name,
-                "event_date": event_date, "event_color": event_color}
+            {
+                "user_id": user_id,
+                "event_name": event_name,
+                "event_date": event_date,
+                "event_color": event_color
+            }
         )
         db.commit()
 
@@ -380,18 +298,74 @@ def delete_event():
         # Get data from form
         event_delete = request.form.get("deleted_event")
 
+        # Check for input
+        if not event_delete:
+            return apology("Must provide event information", 400)
+
+        try:
+            # Separate name and date from the input string
+            event_delete_split = event_delete.split("   ")
+            name_to_delete = event_delete_split[0]
+            date_to_delete = event_delete_split[1]
+        except IndexError:
+            return apology("Must provide event info as displayed in list", 400)
+
+        # Check that input is in correct format
+        if not name_to_delete:
+            return apology("Must provide event name", 400)
+
+        if not date_to_delete:
+            return apology("Must provide event date", 400)
+
+        if not re.match(r"\d{2}/\d{2}/\d{4}", date_to_delete):
+            return apology("Event date must be in MM/DD/YYYY format", 400)
+
         # Get user id
         user_id = session["user_id"]
 
-        try:
-            # Delete event from SQL table
-            db.execute(
-                text(
-                    "DELETE FROM events WHERE name = :event_delete AND user_id = :user_id"),
-                {"event_delete": event_delete, "user_id": user_id}
+        # Select event names
+        event_names = db.execute(
+            text("SELECT name FROM events WHERE user_id = :user_id"),
+            {
+                "user_id": user_id
+            }
+        ).fetchall()
+
+        # Extract the names from the result set and store them in a separate list
+        names = [row[0] for row in event_names]
+
+        # Check if event_delete matches any element in the names list
+        if name_to_delete in names:
+
+            # Check if the data exists before attempting deletion
+            result = db.execute(
+                text("SELECT COUNT(*) FROM events WHERE name = :name_to_delete AND event_date = :date_to_delete AND user_id = :user_id"),
+                {
+                    "name_to_delete": name_to_delete,
+                    "date_to_delete": date_to_delete,
+                    "user_id": user_id
+                }
             )
-            db.commit()
-        except:
+            row_count = result.scalar()
+
+            if row_count > 0:
+
+                # Data exists, proceed with deletion
+                db.execute(
+                    text(
+                        "DELETE FROM events WHERE name = :name_to_delete AND event_date = :date_to_delete AND user_id = :user_id"),
+                    {
+                        "name_to_delete": name_to_delete,
+                        "date_to_delete": date_to_delete,
+                        "user_id": user_id
+                    }
+                )
+                db.commit()
+
+            else:
+                return apology("Event does not exist", 400)
+
+        else:
             return apology("Event does not exist", 400)
 
         # Give message to user
@@ -407,13 +381,15 @@ def delete_event():
         user_id = session["user_id"]
 
         # Get event names from SQL table to display in dropdown menu
-        event_names = db.execute(
-            text("SELECT name FROM events WHERE user_id = :user_id"),
-            {"user_id": user_id}
+        event_data = db.execute(
+            text("SELECT name, event_date FROM events WHERE user_id = :user_id"),
+            {
+                "user_id": user_id
+            }
         )
 
         # Show delete event page and pass event_names to the template
-        return render_template("delete_event.html", names=event_names)
+        return render_template("delete_event.html", data=event_data)
 
 
 @app.route("/todo")
@@ -427,7 +403,9 @@ def todo():
     # Get event details from SQL table
     tasks_info = db.execute(
         text("SELECT task_id, task_name, completed FROM tasks WHERE user_id = :user_id"),
-        {"user_id": user_id}
+        {
+            "user_id": user_id
+        }
     )
 
     return render_template("todo.html", tasks_html=tasks_info)
@@ -455,7 +433,10 @@ def add_todo():
     # Insert it into SQL database
     db.execute(
         text("INSERT INTO tasks (task_name, user_id) VALUES(:task_name, :user_id) "),
-        {"task_name": todo_title, "user_id": user_id}
+        {
+            "task_name": todo_title,
+            "user_id": user_id
+        }
     )
     db.commit()
 
@@ -473,7 +454,10 @@ def update_todo(id):
     # Update to-do in SQL database
     db.execute(
         text("UPDATE tasks SET completed = 1 WHERE task_id = :task_id AND user_id = :user_id"),
-        {"task_id": id, "user_id": user_id}
+        {
+            "task_id": id,
+            "user_id": user_id
+        }
     )
     db.commit()
 
@@ -491,8 +475,130 @@ def delete_todo(id):
     # Delete to-do in SQL database
     db.execute(
         text("DELETE FROM tasks WHERE task_id = :task_id AND user_id = :user_id"),
-        {"task_id": id, "user_id": user_id}
+        {
+            "task_id": id,
+            "user_id": user_id
+        }
     )
     db.commit()
 
     return redirect('/todo')
+
+
+@app.route("/settings")
+@login_required
+def settings():
+    """Settings"""
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Select study, short, and long break from SQL table to display in form
+    settings = db.execute(
+        text("SELECT study, short, long FROM pomodoro WHERE user_id = :user_id"),
+        {
+            "user_id": user_id
+        }
+    ).fetchone()
+
+    # Get username to display in form
+    username_db = db.execute(
+        text("SELECT username FROM users WHERE id = :user_id"),
+        {
+            "user_id": user_id
+        }
+    ).fetchone()
+
+    # Get values from the fetched row
+    study = settings[0]  # Index 0 corresponds to "study"
+    short = settings[1]  # Index 1 corresponds to "short"
+    long = settings[2]   # Index 2 corresponds to "long"
+
+    return render_template("settings.html", html_study=study, html_short=short, html_long=long, html_username=username_db[0])
+
+
+@app.route("/timer_settings", methods=["POST"])
+@login_required
+def timer_settings():
+    """Timer settings"""
+    # Get data from form
+    study = request.form.get("study")
+    short = request.form.get("shortBreak")
+    long = request.form.get("longBreak")
+
+    # Ensure there is study time
+    if not study:
+        return apology("Must provide study time", 400)
+
+    # Ensure there is short break time
+    if not short:
+        return apology("Must provide short break time", 400)
+
+    # Ensure there is long break time
+    if not long:
+        return apology("Must provide long break time", 400)
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Update new settings in SQL table
+    db.execute(
+        text("UPDATE pomodoro SET study = :study, short = :short, long = :long WHERE user_id = :user_id"),
+        {
+            "study": study,
+            "short": short,
+            "long": long,
+            "user_id": user_id
+        }
+    )
+    db.commit()
+
+    # Give message to user
+    flash("Timer settings updated!")
+
+    # Stay on settings page
+    return redirect("/settings")
+
+
+@app.route("/change_password", methods=["POST"])
+@login_required
+def change_password():
+    """Change password"""
+
+    # Get data from form
+    new_password = request.form.get("new_password")
+    confirmation = request.form.get("confirmation")
+
+    # Ensure there is password
+    if not new_password:
+        return apology("Must provide a new password", 400)
+
+    # Ensure there is confirmation password
+    if not confirmation:
+        return apology("Must provide confirmation password", 400)
+
+    # Ensure password and confirmation password match
+    if new_password != confirmation:
+        return apology("New password does not match confirmation", 400)
+
+    # Get user id
+    user_id = session["user_id"]
+
+    # Generate hash
+    hash = generate_password_hash(new_password)
+
+    # Update new settings in SQL table
+    db.execute(
+        text("UPDATE users SET hash = :new_hash WHERE id = :user_id"),
+        {
+            "new_hash": hash,
+            "user_id": user_id
+        }
+    )
+    db.commit()
+
+    # Give message to user
+    flash("Password changed!")
+
+    # Stay on settings page
+    return redirect("/settings")

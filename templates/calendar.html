@@ -1,53 +1,52 @@
-{% extends "layout.html" %} {% block title %} Calendar {% endblock %} {% block
-main %}
+{% extends "layout.html" %} {% block title %} Calendar {% endblock %} {% block main %}
 
 <link href="../static/calendar.css" rel="stylesheet" />
 
 <div id="all_calendar" class="ui container">
-  <div class="ui container">
-    <div class="ui grid">
-      <div class="ui sixteen column">
-        <div id="calendar"></div>
-      </div>
-    </div>
-  </div>
-  <div id="buttonContainer">
-    <form action="/add_event" method="get">
-      <button id="addEvent" class="btn btn-primary">Add Event</button>
-    </form>
-    <form action="/delete_event" method="get">
-      <button id="deleteEvent" class="btn btn-primary">Delete Event</button>
-    </form>
-  </div>
+	<div class="ui container">
+		<div class="ui grid">
+			<div class="ui sixteen column">
+				<div id="calendar"></div>
+			</div>
+		</div>
+	</div>
+	<div id="buttonContainer">
+		<form action="/add_event" method="get">
+			<button id="addEvent" class="btn btn-primary">Add Event</button>
+		</form>
+		<form action="/delete_event" method="get">
+			<button id="deleteEvent" class="btn btn-primary">Delete Event</button>
+		</form>
+	</div>
 </div>
 
 <script>
-  $(document).ready(function() {
+	$(document).ready(function() {
 
-      $('#calendar').fullCalendar({
-        header: {
-          left: 'today',
-          center: 'title',
-          right: 'prev,next'
-        },
-        defaultDate: moment().format('YYYY-MM-DD'),
-        navLinks: true, // can click day/week names to navigate views
-        editable: false, // cannot edit events on calendar
-        eventLimit: true, // allow "more" link when too many events
-        displayEventTime: false, // don't show the time display
-        firstDay: 1, // Monday as the starting day
-        eventColor: "#4a9eff",
-        events: [
-          {% for event in event_info %}
-          {
-            title: '{{ event.name }}',
-            start: '{{ event.event_date }}',
-            color: '{{ event.color }}'
-          },
-          {% endfor %}
-        ]
-      });
-    });
+	   $('#calendar').fullCalendar({
+	     header: {
+	       left: 'today',
+	       center: 'title',
+	       right: 'prev,next'
+	     },
+	     defaultDate: moment().format('YYYY-MM-DD'),
+	     navLinks: true, // can click day/week names to navigate views
+	     editable: false, // cannot edit events on calendar
+	     eventLimit: true, // allow "more" link when too many events
+	     displayEventTime: false, // don't show the time display
+	     firstDay: 1, // Monday as the starting day
+	     eventColor: "#4a9eff",
+	     events: [
+	       {% for event in event_info %}
+	       {
+	         title: '{{ event.name }}',
+	         start: '{{ event.event_date }}',
+	         color: '{{ event.color }}'
+	       },
+	       {% endfor %}
+	     ]
+	   });
+	 });
 </script>
 
 {% endblock %}

@@ -1,90 +1,90 @@
 /* clock and buttons */
 .watch {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 500px;
-  z-index: 2;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 500px;
+	z-index: 2;
 }
 
 /* clock */
 .time {
-  color: rgb(255, 255, 255);
-  font-size: 8rem;
-  margin-bottom: 0;
-  text-align: center;
+	color: rgb(255, 255, 255);
+	font-size: 8rem;
+	margin-bottom: 0;
+	text-align: center;
 }
 
 /* all clock buttons */
 .controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* top clock buttons */
 #topControls button {
-  appearance: none;
-  background: none;
-  border: none;
-  outline: none;
-  user-select: none;
-  cursor: pointer;
-  color: white;
-  font-size: 1.125rem;
-  background-color: transparent;
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: 0.2s;
-  box-shadow: 0 0 0 1px white;
+	appearance: none;
+	background: none;
+	border: none;
+	outline: none;
+	user-select: none;
+	cursor: pointer;
+	color: white;
+	font-size: 1.125rem;
+	background-color: transparent;
+	margin: 0 0.5rem;
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	transition: 0.2s;
+	box-shadow: 0 0 0 1px white;
 }
 
 /* top clock buttons when hover */
 #topControls button:hover {
-  background-color: white;
-  color: black;
+	background-color: white;
+	color: black;
 }
 
 /* top clock buttons when active */
 #topControls button.active {
-  background-color: white;
-  color: black;
+	background-color: white;
+	color: black;
 }
 
 /* bottom buttons */
 #bottomControls button {
-  background-color: transparent;
-  border: none;
-  font-size: 32.5px;
-  margin-right: 20px;
+	background-color: transparent;
+	border: none;
+	font-size: 32.5px;
+	margin-right: 20px;
 }
 
 /* bottom icons */
 #bottomControls button i {
-  color: white;
+	color: white;
 }
 
 /* top clock buttons when hover */
 #bottomControls button i:hover {
-  filter: brightness(80%);
-  transition: 0.2s;
+	filter: brightness(80%);
+	transition: 0.2s;
 }
 
 /* opacity layer dark background */
 body::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1;
 }
 
 audio {
-  display: none;
+	display: none;
 }

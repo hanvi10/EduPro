@@ -1,215 +1,222 @@
-{% extends "layout.html" %} {% block title %} Timer {% endblock %} {% block main
-%}
+{% extends "layout.html" %} {% block title %} Timer {% endblock %} {% block main %}
 
 <link href="../static/timer.css" rel="stylesheet" />
 
 <!-- The clock -->
 <div class="watch">
-  <div class="controls" id="topControls">
-    <button id="study">Study</button>
-    <button id="shortBreak">Short Break</button>
-    <button id="longBreak">Long Break</button>
-  </div>
-  <div class="time">00:00</div>
-  <div class="controls" id="bottomControls">
-    <button id="startStop"><i class="bi bi-play-fill"></i></button>
-    <button id="reset"><i class="bi bi-arrow-clockwise"></i></button>
-    <button id="settings" type="submit">
-      <a href="/settings"><i class="bi bi-gear-fill"></i></a>
-    </button>
-  </div>
+	<div class="controls" id="topControls">
+		<button id="study">Study</button>
+		<button id="shortBreak">Short Break</button>
+		<button id="longBreak">Long Break</button>
+	</div>
+	<div class="time">00:00</div>
+	<div class="controls" id="bottomControls">
+		<button id="startStop"><i class="bi bi-play-fill"></i></button>
+		<button id="reset"><i class="bi bi-arrow-clockwise"></i></button>
+		<button id="settings" type="submit">
+			<a href="/settings"><i class="bi bi-gear-fill"></i></a>
+		</button>
+	</div>
 </div>
 
 <!-- Sound for when the clock gets to 0 -->
 <audio id="alarmSound">
-  <source
-    src="https://www.dropbox.com/s/8i93omunntmzbdf/alarm.mp3?raw=1"
-    type="audio/mpeg"
-  />
-  Your browser does not support the audio element.
+	<source src="https://www.dropbox.com/s/8i93omunntmzbdf/alarm.mp3?raw=1" type="audio/mpeg" />
+	Your browser does not support the audio element.
 </audio>
 
 <script>
 
-  // Global variables
-  const time_el = document.querySelector(".watch .time");
-  const startStop_btn = document.getElementById("startStop");
-  const reset_btn = document.getElementById("reset");
-  const body_el = document.querySelector("body");
-  const study_btn = document.getElementById("study");
-  const shortBreak_btn = document.getElementById("shortBreak");
-  const longBreak_btn = document.getElementById("longBreak");
-  const topButtons = document.querySelectorAll('.controls:nth-child(1) button');
-  let stopTime = 0;
-  let running = false;
-  let input_seconds;
-  let seconds;
-  let interval = null;
-  let timerMin = {{ html_study }};
-  let shortBreakMin = {{ html_short }};
-  let longBreakMin = {{ html_long }};
+	// Global variables
+	const time_el = document.querySelector(".watch .time");
+	const startStop_btn = document.getElementById("startStop");
+	const reset_btn = document.getElementById("reset");
+	const study_btn = document.getElementById("study");
+	const shortBreak_btn = document.getElementById("shortBreak");
+	const longBreak_btn = document.getElementById("longBreak");
+	const topButtons = document.querySelectorAll('.controls:nth-child(1) button');
+	let stopTime = 0;
+	let running = false;
+	let input_seconds;
+	let seconds;
+	let interval = null;
+	let timerMin = {{ html_study }};
+	let shortBreakMin = {{ html_short }};
+	let longBreakMin = {{ html_long }};
 
 
-  // Background images
-  const backgrounds = [
-  "https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg",
-  "https://images.pexels.com/photos/2775196/pexels-photo-2775196.jpeg",
-  "https://images.pexels.com/photos/3747499/pexels-photo-3747499.jpeg",
-  "https://images.pexels.com/photos/2850287/pexels-photo-2850287.jpeg",
-  "https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg",
-  "https://images.pexels.com/photos/1034008/pexels-photo-1034008.jpeg",
-  "https://images.pexels.com/photos/1766828/pexels-photo-1766828.jpeg",
-  "https://images.pexels.com/photos/2114014/pexels-photo-2114014.jpeg",
-  "https://images.pexels.com/photos/175773/pexels-photo-175773.jpeg",
-  "https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg",
-  "https://images.pexels.com/photos/1907784/pexels-photo-1907784.jpeg",
-  "https://images.pexels.com/photos/3646172/pexels-photo-3646172.jpeg",
-  "https://images.pexels.com/photos/956999/milky-way-starry-sky-night-sky-star-956999.jpeg",
-  "https://images.pexels.com/photos/937783/pexels-photo-937783.jpeg",
-  "https://images.pexels.com/photos/1366922/pexels-photo-1366922.jpeg"
-  ];
+	// Event listeners
+	startStop_btn.addEventListener("click", startStop);
+	reset_btn.addEventListener("click", reset);
+	study_btn.addEventListener("click", study);
+	shortBreak_btn.addEventListener("click", shortBreak);
+	longBreak_btn.addEventListener("click", longBreak);
 
 
-  // Change backround image every hour
-  function changeBackground() {
-      const randomIndex = Math.floor(Math.random() * backgrounds.length);
-      const imageUrl = backgrounds[randomIndex];
-      document.body.style.backgroundImage = `url('${imageUrl}')`;
-  }
 
-  setInterval(changeBackground, 3600000);
+	// Function that runs every second
+	function timer () {
+
+	    // Decrement the seconds variable
+	    seconds--;
+
+	    // Format time
+	    updateDisplay();
+
+	    // Check if seconds is less than or equal to 0
+	    if (seconds <= 0) {
+	        stop();
+	        playAlarmSound();
+	    }
+	}
 
 
-  // Event listeners
-  startStop_btn.addEventListener("click", startStop);
-  reset_btn.addEventListener("click", reset);
-  study_btn.addEventListener("click", study);
-  shortBreak_btn.addEventListener("click", shortBreak);
-  longBreak_btn.addEventListener("click", longBreak);
+	// Buttons functions
+	function startStop () {
+	    if (running) {
+	        // Timer is currently running, so stop it
+	        stop();
+	        stopTime = seconds;
+	    } else {
+	        // Timer is currently stopped, so start it
+	        if (stopTime) {
+	            seconds = stopTime;
+	            stopTime = 0;
+	        }
+	        if (seconds > 0) {
+	        interval = setInterval(timer, 1000);
+	        running = true;
+	        startStop_btn.innerHTML = '<i class="bi bi-pause-fill"></i>';
+	        }
+	    }
+	}
 
-  // Buttons effect
-  topButtons.forEach(button => {
-      button.addEventListener('click', function() {
-      // Remove 'active' class from all top buttons
-      topButtons.forEach(btn => btn.classList.remove('active'));
-      // Add 'active' class to the clicked button
-      this.classList.add('active');
-      });
-  });
+	// Called in several functions
+	function stop () {
+	clearInterval(interval);
+	interval = null;
+	running = false;
+	startStop_btn.innerHTML = '<i class="bi bi-play-fill"></i>';
+	}
 
-  // Set timer to study when page loads and set a random background
-  window.addEventListener("DOMContentLoaded", function() {
-      study_btn.classList.add("active");
-      study();
-      changeBackground();
-  });
+	// Reset timer
+	function reset () {
 
-  function study() {
-      stop();
-      input_seconds = timerMin * 60;
-      seconds = input_seconds;
-      stopTime = 0;
-      updateDisplay();
-  }
+	    // Stop timer
+	    if (running) {
+	        stop();
+	    }
 
-  function shortBreak() {
-      stop();
-      input_seconds = shortBreakMin * 60;
-      seconds = input_seconds;
-      stopTime = 0;
-      updateDisplay();
-  }
+	    // Stop time to 0
+	    stopTime = 0;
 
-  function longBreak() {
-      stop();
-      input_seconds = longBreakMin * 60;
-      seconds = input_seconds;
-      stopTime = 0;
-      updateDisplay();
-  }
+	    // Reset time
+	    if (input_seconds === 0 || input_seconds === null || isNaN(input_seconds)) {
+	        seconds = 0;
+	    } else {
+	        seconds = input_seconds;
+	    }
+	    updateDisplay();
+	}
 
-  // Function that runs every second
-  function timer () {
 
-      // Decrement the seconds variable
-      seconds--;
+	// Timer control functions, top buttons
+	function study() {
+	    stop();
+	    input_seconds = timerMin * 60;
+	    seconds = input_seconds;
+	    stopTime = 0;
+	    updateDisplay();
+	}
 
-      // Format time
-      updateDisplay();
+	function shortBreak() {
+	    stop();
+	    input_seconds = shortBreakMin * 60;
+	    seconds = input_seconds;
+	    stopTime = 0;
+	    updateDisplay();
+	}
 
-      // Check if seconds is less than or equal to 0
-      if (seconds <= 0) {
-          stop();
-          playAlarmSound();
-      }
-  }
+	function longBreak() {
+	    stop();
+	    input_seconds = longBreakMin * 60;
+	    seconds = input_seconds;
+	    stopTime = 0;
+	    updateDisplay();
+	}
 
-  // Play alarm sound
-  function playAlarmSound() {
-      const alarmSound = document.getElementById("alarmSound");
-      alarmSound.play();
-    }
 
-  function stop () {
-      clearInterval(interval);
-      interval = null;
-      running = false;
-      startStop_btn.innerHTML = '<i class="bi bi-play-fill"></i>';
-  }
+	// Format time
+	function updateDisplay() {
+	    let hrs = Math.floor(seconds / 3600);
+	    let mins = Math.floor((seconds - (hrs * 3600)) / 60);
+	    let secs = seconds % 60;
+	    if (secs < 10) secs = "0" + secs;
+	    if (mins < 10) mins = "0" + mins;
+	    if (hrs < 10) hrs = "0" + hrs;
+	    if (hrs < 1) {
+	        time_el.innerText = `${mins}:${secs}`;
+	    } else {
+	        time_el.innerText = `${hrs}:${mins}:${secs}`;
+	}
+	}
 
-  function startStop () {
-      if (running) {
-          // Timer is currently running, so stop it
-          stop();
-          stopTime = seconds;
-      } else {
-          // Timer is currently stopped, so start it
-          if (stopTime) {
-              seconds = stopTime;
-              stopTime = 0;
-          }
-          if (seconds > 0) {
-          interval = setInterval(timer, 1000);
-          running = true;
-          startStop_btn.innerHTML = '<i class="bi bi-pause-fill"></i>';
-          }
-      }
-  }
 
-  // Reset timer
-  function reset () {
+	// Play alarm sound
+	function playAlarmSound() {
+	    const alarmSound = document.getElementById("alarmSound");
+	    alarmSound.play();
+	}
 
-      // Stop timer
-      if (running) {
-          stop();
-      }
 
-      // Stop time to 0
-      stopTime = 0;
+	// Backround functions
+	// Background images
+	const backgrounds = [
+	"https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg",
+	"https://images.pexels.com/photos/2775196/pexels-photo-2775196.jpeg",
+	"https://images.pexels.com/photos/3747499/pexels-photo-3747499.jpeg",
+	"https://images.pexels.com/photos/2850287/pexels-photo-2850287.jpeg",
+	"https://images.pexels.com/photos/2908984/pexels-photo-2908984.jpeg",
+	"https://images.pexels.com/photos/1034008/pexels-photo-1034008.jpeg",
+	"https://images.pexels.com/photos/1766828/pexels-photo-1766828.jpeg",
+	"https://images.pexels.com/photos/2114014/pexels-photo-2114014.jpeg",
+	"https://images.pexels.com/photos/175773/pexels-photo-175773.jpeg",
+	"https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg",
+	"https://images.pexels.com/photos/1907784/pexels-photo-1907784.jpeg",
+	"https://images.pexels.com/photos/3646172/pexels-photo-3646172.jpeg",
+	"https://images.pexels.com/photos/956999/milky-way-starry-sky-night-sky-star-956999.jpeg",
+	"https://images.pexels.com/photos/937783/pexels-photo-937783.jpeg",
+	"https://images.pexels.com/photos/1366922/pexels-photo-1366922.jpeg"
+	];
 
-      // Reset time
-      if (input_seconds === 0 || input_seconds === null || isNaN(input_seconds)) {
-          seconds = 0;
-      } else {
-          seconds = input_seconds;
-      }
-      updateDisplay();
-  }
+	// Change backround image every hour
+	function changeBackground() {
+	    const randomIndex = Math.floor(Math.random() * backgrounds.length);
+	    const imageUrl = backgrounds[randomIndex];
+	    document.body.style.backgroundImage = `url('${imageUrl}')`;
+	}
 
-  // Format time
-  function updateDisplay() {
-      let hrs = Math.floor(seconds / 3600);
-      let mins = Math.floor((seconds - (hrs * 3600)) / 60);
-      let secs = seconds % 60;
-      if (secs < 10) secs = "0" + secs;
-      if (mins < 10) mins = "0" + mins;
-      if (hrs < 10) hrs = "0" + hrs;
-      if (hrs < 1) {
-          time_el.innerText = `${mins}:${secs}`;
-      } else {
-          time_el.innerText = `${hrs}:${mins}:${secs}`;
-    }
-   }
+	// Change backround every hour
+	setInterval(changeBackground, 3600000);
+
+
+	// Set timer to study when page loads and set a random background
+	window.addEventListener("DOMContentLoaded", function() {
+	    study_btn.classList.add("active");
+	    study();
+	    changeBackground();
+	});
+
+
+	// Buttons effect
+	topButtons.forEach(button => {
+	    button.addEventListener('click', function() {
+	    // Remove 'active' class from all top buttons
+	    topButtons.forEach(btn => btn.classList.remove('active'));
+	    // Add 'active' class to the clicked button
+	    this.classList.add('active');
+	    });
+	});
 </script>
 
 {% endblock %}
