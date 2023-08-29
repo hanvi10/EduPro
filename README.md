@@ -1,22 +1,20 @@
 # EduPro - Study Enhancement Flask Web App
 
-#### Video Demo: https://www.youtube.com/watch?v=ws8Vqquq-lY
-
 #### Description:
 
 EduPro is a user-friendly and intuitive Flask web application designed to assist students in enhancing their study habits and productivity. The app combines three essential tools – a timer, a calendar and a todo list – to create an optimal environment for effective learning. With EduPro, students can manage their study sessions more efficiently and stay organized throughout their academic journey.
 
 ## Features
 
-- **Study Timer**: EduPro features a built-in study timer that employs the Pomodoro technique to help students maintain focused and productive study sessions. Users can set customizable study and break durations, allowing them to work in concentrated bursts while avoiding burnout.
+-   **Study Timer**: EduPro features a built-in study timer that employs the Pomodoro technique to help students maintain focused and productive study sessions. Users can set customizable study and break durations, allowing them to work in concentrated bursts while avoiding burnout.
 
-- **Interactive Calendar**: The integrated calendar enables students to schedule their study sessions, assignments, and exams in a visually appealing and organized manner. This helps students plan ahead and allocate time appropriately for various subjects and tasks.
+-   **Interactive Calendar**: The integrated calendar enables students to schedule their study sessions, assignments, and exams in a visually appealing and organized manner. This helps students plan ahead and allocate time appropriately for various subjects and tasks.
 
-- **Todo List**: Stay on top of your tasks with the new todo list feature. Add, complete, and delete tasks to keep track of your assignments, readings, and other responsibilities.
+-   **Todo List**: Stay on top of your tasks with the new todo list feature. Add, complete, and delete tasks to keep track of your assignments, readings, and other responsibilities.
 
-- **Setttings**: Customize your study experience with the app's settings. Adjust the timer durations for each state—study, short break, and long break—to cater to your productivity preferences. Additionally, conveniently modify your password through the settings menu to maintain account security.
+-   **Setttings**: Customize your study experience with the app's settings. Adjust the timer durations for each state—study, short break, and long break—to cater to your productivity preferences. Additionally, conveniently modify your password through the settings menu to maintain account security.
 
-- **User Authentication**: EduPro ensures user privacy and security by implementing a robust user authentication system. Each user can have a personalized profile with their timer preferences and calendar events.
+-   **User Authentication**: EduPro ensures user privacy and security by implementing a robust user authentication system. Each user can have a personalized profile with their timer preferences and calendar events.
 
 ## How to Use
 
@@ -36,12 +34,12 @@ EduPro is a user-friendly and intuitive Flask web application designed to assist
 
 EduPro's codebase is organized into the following main directories and files:
 
-- `app.py`: This file contains the main application code, including routes, templates, and static assets.
-- `helpers.py`: Contains some functions used in in `app.py` like `apology`
-- `templates/`: Here you'll find the HTML templates used to render the app's frontend.
-- `static/`: This directory hosts static files such as stylesheets.
-- `requirements.txt`: Lists all the Python packages required for running the application.
-- `final.db`: This file contains all the data from users like timer preferences and calendar events.
+-   `app.py`: This file contains the main application code, including routes, templates, and static assets.
+-   `helpers.py`: Contains some functions used in in `app.py` like `apology`
+-   `templates/`: Here you'll find the HTML templates used to render the app's frontend.
+-   `static/`: This directory hosts static files such as stylesheets.
+-   `requirements.txt`: Lists all the Python packages required for running the application.
+-   `final.db`: This file contains all the data from users like timer preferences and calendar events.
 
 ## Installation
 
