@@ -46,7 +46,7 @@ git push origin feature/your-feature-name
 
 ## Reporting Issues
 
-If you encounter any bugs or have suggestions for improvements, please [open an issue](https://github.com/hanvi10/edupro/issues) on the GitHub repository. When creating an issue, please provide as much detail as possible to help us understand and resolve the problem.
+If you encounter any bugs or have suggestions for improvements, please [open an issue](https://github.com/hanvi10/edupro/issues/new) on the GitHub repository. When creating an issue, please provide as much detail as possible to help us understand and resolve the problem.
 
 ## Style Guidelines
 
