@@ -1,5 +1,7 @@
 # EduPro - Study Enhancement Flask Web App
 
+Visit EduPro at
+
 #### Description:
 
 EduPro is a user-friendly and intuitive Flask web application designed to assist students in enhancing their study habits and productivity. The app combines three essential tools – a timer, a calendar and a todo list – to create an optimal environment for effective learning. With EduPro, students can manage their study sessions more efficiently and stay organized throughout their academic journey.
@@ -40,36 +42,6 @@ EduPro's codebase is organized into the following main directories and files:
 -   `static/`: This directory hosts static files such as stylesheets.
 -   `requirements.txt`: Lists all the Python packages required for running the application.
 -   `final.db`: This file contains all the data from users like timer preferences and calendar events.
-
-## Installation
-
-To run EduPro locally, follow these steps:
-
-1. Clone this repository:
-
-```
-git clone https://github.com/hanvi10/edupro.git
-```
-
-2. Navigate to the project directory:
-
-```
-cd edupro
-```
-
-3. Install dependencies using pip:
-
-```
-pip install -r requirements.txt
-```
-
-4. Run the Flask development server:
-
-```
-flask run
-```
-
-5. Access the app in your web browser at `http://localhost:5000`.
 
 ## Credits
 
