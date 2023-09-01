@@ -43,6 +43,10 @@ EduPro's codebase is organized into the following main directories and files:
 -   `requirements.txt`: Lists all the Python packages required for running the application.
 -   `final.db`: This file contains all the data from users like timer preferences and calendar events.
 
+## Contributions
+
+We welcome contributions from the community to make EduPro even better! If you're interested in contributing, please check out our [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get started.
+
 ## Credits
 
 EduPro was developed by Han Virgili Phan. I acknowledge the contributions of various open-source libraries and tools that made this project possible.
